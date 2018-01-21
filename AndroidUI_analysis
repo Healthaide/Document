@@ -3,3 +3,7 @@ Three parts in the page:
   1) Navigation bar
   2) Login function area
   3) Title bar
+
+The Navigation bar includes Quick registration and Forgotten password.
+
+The Login function area iincludes an input field with user name, another input field with password and a button with Login.
