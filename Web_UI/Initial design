@@ -1,0 +1,117 @@
+The website of Heath aide is a management platform.
+The manager can add, delete and search the information of doctors and articles. Besides, the manager can also check users' feedback and search relevant advices about certain concept.
+
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+Login interface of manager
+
+Three parts in the page:
+
+  1) Status bar
+
+  2) Navigation bar
+
+  3) content
+
+
+
+The Status bar includes website address, refresh button and correct current website button......
+
+The Navigation bar has a page title called "Health aide".
+
+The content area includes an input field with user name, another input field with password and a button with Login.
+
+
+
+The content in the input field with password shows implicitly to manage and it can also be chosen to be visible in order to help manager check the password.  
+we decided to choose a picture about nature as our background of the login homepage since this kind of picture can match most people's taste.
+
+
+
+Based on above evaluations, there is an initial mockup for login interface designed by balsamiq mockup, and see Login.pdf.
+
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+Main manage interface
+
+Three parts in the page:
+
+  1) Status bar
+
+  2) Navigation bar
+
+  3) content
+
+
+The Status bar includes website address, refresh button and correct current website button......
+
+The Navigation bar is on the left with six buttons: 
+  1) Article publishing
+  2) Article management
+  3) Feedback
+  4) Doctor management
+  5) Tips and topic
+  6) User management
+
+The content will change according to manager's choice. 
+
+
+For "Article publishing" interface:
+
+
+
+Based on above evaluations, there is an initial mockup for article publishing interface designed by balsamiq mockup, and see ArticlePublishing.pdf.
+
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+For "Article management" interface:
+
+
+
+Based on above evaluations, there is an initial mockup for article management interface designed by balsamiq mockup, and see ArticleManagement.pdf.
+
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+For "Feedback" interface:
+
+
+
+Based on above evaluations, there is an initial mockup for feedback interface designed by balsamiq mockup, and see Feedback.pdf.
+
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+For "Doctor management" interface:
+
+
+
+Based on above evaluations, there is an initial mockup for doctor management interface designed by balsamiq mockup, and see DoctorManagement.pdf.
+
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+For "User management" interface:
+
+
+
+Based on above evaluations, there is an initial mockup for user management interface designed by balsamiq mockup, and see UserManagement.pdf.
+
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+set-up 
+
+When move the mouse to this button, there are two sub-choice buttons:
+  1) Modify the password
+  2) logout
+  
+In the modify the password interface:
+  1) a label named "Old password" followed by an input text with hints “please enter old password”, a sign is on the right side, if the password matches the old one the sign will turn to green otherwise it will be red.
+  2) a label named "New password" followed by an input text with hints “please enter new password”
+  3) a label named "Confirm new password" followed by an input text with hints "please enter new password again", a sign is on the right side, if the password matches the previous new one the sign will turn to green otherwise it will be red.
+  4) a button named "Confirm"
+
+We request user to enter the new password at twice, because if they make a mistake and enter the wrong new password, they will fail to login next time.
+
+When click "logout" user will come back to the login interface.
+  
+Based on above evaluations, there is an initial mockup for set-up interface and modifying the password interface designed by balsamiq mockup, and see Set-up.pdf.
+
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
