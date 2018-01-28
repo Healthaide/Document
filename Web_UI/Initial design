@@ -28,7 +28,7 @@ we decided to choose a picture about nature as our background of the login homep
 
 
 
-Based on above evaluations, there is an initial mockup for login interface designed by balsamiq mockup, and see Login.pdf.
+Based on above evaluations, there is an initial mockup for login interface designed by balsamiq mockup, and see page 1 of Initial mockup.pdf.
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
@@ -45,23 +45,29 @@ Three parts in the page:
 
 The Status bar includes website address, refresh button and correct current website button......
 
-The Navigation bar is on the left with six buttons: 
+Navigation bar's title will change to "Health aide management platform"
+
+The function bar is on the left with six buttons: 
   1) Article publishing
   2) Article management
   3) Feedback
   4) Doctor management
-  5) Tips and topic
+  5) Tip and topic
   6) User management
   7）Set-up
 
 The content will change according to manager's choice. 
 
-
 For "Article publishing" interface:
 
+Edit article
+Title
+Time 
+Category
+Content
+Publish /Reset all
 
-
-Based on above evaluations, there is an initial mockup for article publishing interface designed by balsamiq mockup, and see ArticlePublishing.pdf.
+Based on above evaluations, there is an initial mockup for article publishing interface designed by balsamiq mockup, and see page 2 of Initial mockup.pdf.
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
@@ -69,7 +75,7 @@ For "Article management" interface:
 
 
 
-Based on above evaluations, there is an initial mockup for article management interface designed by balsamiq mockup, and see ArticleManagement.pdf.
+Based on above evaluations, there is an initial mockup for article management interface designed by balsamiq mockup, and see page 3 to page 6 of Initial mockup.pdf.
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
@@ -77,7 +83,7 @@ For "Feedback" interface:
 
 
 
-Based on above evaluations, there is an initial mockup for feedback interface designed by balsamiq mockup, and see Feedback.pdf.
+Based on above evaluations, there is an initial mockup for feedback interface designed by balsamiq mockup, and see page 7 and page 8 of Initial mockup.pdf.
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
@@ -85,7 +91,7 @@ For "Doctor management" interface:
 
 
 
-Based on above evaluations, there is an initial mockup for doctor management interface designed by balsamiq mockup, and see DoctorManagement.pdf.
+Based on above evaluations, there is an initial mockup for doctor management interface designed by balsamiq mockup, and see page 9 and page 10 of Initial mockup.pdf.
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
@@ -93,7 +99,7 @@ For "User management" interface:
 
 
 
-Based on above evaluations, there is an initial mockup for user management interface designed by balsamiq mockup, and see UserManagement.pdf.
+Based on above evaluations, there is an initial mockup for user management interface designed by balsamiq mockup, and see page 11 of Initial mockup.pdf.
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
@@ -113,6 +119,6 @@ We request user to enter the new password at twice, because if they make a mista
 
 When click "logout" user will come back to the login interface.
   
-Based on above evaluations, there is an initial mockup for set-up interface and modifying the password interface designed by balsamiq mockup, and see Set-up.pdf.
+Based on above evaluations, there is an initial mockup for set-up interface and modifying the password interface designed by balsamiq mockup, and see page 14 and page 15 of Initial mockup.pdf.
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
