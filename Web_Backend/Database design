@@ -1,0 +1,65 @@
+Database for the web
+Administrator (account, pwd)
+Article (Title, ANum, ATime, AAuthor, Source, Category, AContent)
+Doctor (DName, ID, Gender, Hosptal, Department, Job title, PhoneNum, IniPwd, Avator)
+User feedback (Username, UTime, Feedback)
+Topic (TName, TNum, TTime, TContent)
+PushedInfor (Place, PTime, PContent)
+
+Create table Administrator(
+    account  char(50)  primary key  not null,
+    pwd     char(20)  not null
+);
+At the beginning, we decided to use one manager for convenience.
+
+Create table Article(
+    Title  char(50)  primary key  not null,
+ANum  int  not null,
+ATime  date,
+AAuthor  char(20),
+Source   char(100),
+Category  char(10),
+AContent  text
+);
+
+Create table Doctor(
+    DName  char(50)  primary key  not null,
+ID  int  primary key  not null,
+Gender  char(1),
+Hospital  char(50),
+Department  char(50),
+JobTitle  char(50),
+PhoneNum  int,
+IniPwd  char(50),
+Avator  image
+);
+
+Create table UserFeedback(
+    Username  char(50)  primary key  not null,
+UTime  date,
+Feedback  text
+);
+
+Create table Topic(
+    TName  char(50)  primary key  not null,
+TNum  int  not null,
+TTime  date,
+TContent  text
+);
+
+Create table PushedInfor(
+    place  varchar(50)  primary key  not null,
+PNum  int  not null,
+PTime  date,
+PContent  text
+);
+
+I use PowerDesigner to draw an E-R diagram which is Conceptual Data Model.
+ 
+And I used MVC model in the web back-end, just like the image that I draw:
+The three-tier is the presentation layer (Web layer), business logic layer, and data access layer.
+Web layer: Contains content related to Web such as JSP and Servlet;
+Business layer: business layer does not contain JavaWeb API, it only concerned about the business logic;
+Data layer: package access to the database details;
+
+Note that JavaWeb APIs can not appear in the business layer, such as request, response, and so on. That is, business layer code is reusable and can even be applied to non-Web environments. The business layer relies on the data layer, and the Web layer relies on the business layer.
