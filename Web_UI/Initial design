@@ -3,7 +3,7 @@ The manager can add, delete and search the information of doctors and articles. 
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-Login interface of manager
+For "Login" interface of manager:
 
 Three parts in the page:
 
@@ -32,7 +32,7 @@ Based on above evaluations, there is an initial mockup for login interface desig
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-Main manage interface
+For Main manage interface
 
 Three parts in the page:
 
@@ -60,12 +60,14 @@ The content will change according to manager's choice.
 
 For "Article publishing" interface:
 
-Edit article
-Title
-Time 
-Category
-Content
-Publish /Reset all
+The title is "Edit article", below it there are:
+  1) a label named "Title" followed by an input text.
+  2) a label named "Time" followed by an input text.
+  3) a label named "Category" followed by an input text.
+  4) a label named "Content" followed by an input text.
+  5) a button named "Publish" and another one named "Reset all"
+
+This interface is the first one managers see after they login. The reason is that article updating is the most frequent operation for manager.
 
 Based on above evaluations, there is an initial mockup for article publishing interface designed by balsamiq mockup, and see page 2 of Initial mockup.pdf.
 
@@ -73,6 +75,18 @@ Based on above evaluations, there is an initial mockup for article publishing in
 
 For "Article management" interface:
 
+In the navigation bar, there is an extra searching bar for searching relevant article according to the key word.
+As the amount of article is large, searching function is quite convenient when manager want to check or delete certain article. Manager can find the article through entering any key word about their properties.
+
+In the content area, the title is "Article management" followed by an article list which has three properties:
+   1) Title
+   2) Time
+   3) Category 
+At the end of each line there are two buttons called "Delete" and "Check". Managers can browse the whole list and they also can skip to the beginning page or end page.
+
+Since the content of most article is abbreviated, manager can click "Check" to get more details.
+
+When manager need to delete some articles, they will be informed whether the operation is successful. The messsage will be "Delete Successfully!" or "Please try again!"
 
 
 Based on above evaluations, there is an initial mockup for article management interface designed by balsamiq mockup, and see page 3 to page 6 of Initial mockup.pdf.
@@ -81,7 +95,12 @@ Based on above evaluations, there is an initial mockup for article management in
 
 For "Feedback" interface:
 
+The checking and searching function are similar with "Article management" interface while the attribute of feedback is:
+  1) User
+  2) Time 
+  3) Content.
 
+But manager is not allowed to delete any feedback, since it is just like a fake for our users.
 
 Based on above evaluations, there is an initial mockup for feedback interface designed by balsamiq mockup, and see page 7 and page 8 of Initial mockup.pdf.
 
@@ -89,21 +108,51 @@ Based on above evaluations, there is an initial mockup for feedback interface de
 
 For "Doctor management" interface:
 
-
+Its checking, searching and deleting function are similar with "Article management" interface while the attribute of doctor are:
+  1) Name
+  2) Hospital
+  3) Department
+  4) Title 
+  5) Phone number.
+ 
+It is worth mentioning that above the doctor list there is an area for adding new doctor, because compared with checking or finding a doctor, the website is more commonly used for adding new doctors.
 
 Based on above evaluations, there is an initial mockup for doctor management interface designed by balsamiq mockup, and see page 9 and page 10 of Initial mockup.pdf.
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
+For "Tip & Topic" interface:
+
+We only have publishing function for tip and topic, and this interface is divided to two parts, but they are both similar with "Article publishing" interface.
+For the upper section, it is topic publishing and the attribute of topic are: 
+  1) Topic
+  2) Time
+  3) Content
+
+For the under section, it is tip publishing and the attribute of tip are:
+  1) Area
+  2) Time
+  3) Content
+
+Based on above evaluations, there is an initial mockup for tip & topic interface designed by balsamiq mockup, and see TipTopic.pdf.
+
+———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
 For "User management" interface:
 
-
+The adding and searching function are similar with "Doctor management" interface while the attribute of manager are:
+  1) Account name
+  2) Initial password 
+  3) Confirm password
+  
+We request user to enter the Initial password at twice, because if they make a mistake and enter the wrong new password, they will fail to login next time.
+Current account cannot see other managers' password.
 
 Based on above evaluations, there is an initial mockup for user management interface designed by balsamiq mockup, and see page 11 of Initial mockup.pdf.
 
 ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-set-up 
+For "set-up" interface:
 
 When move the mouse to this button, there are two sub-choice buttons:
   1) Modify the password
