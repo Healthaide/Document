@@ -1,0 +1,9 @@
+I am Xin Wang, and I accomplished the configuration of MySQL and My Eclipse in this week. I discussed with 
+Bill about the functions in the web, and designed an initial database draft. Normalization is the best and 
+easiest way to get the logical structure of a table in an efficient relational database. When normalizing 
+data, consider the following: The structure of the database streamlined to the simplest form. Remove 
+redundant columns from the table. Identify all data that depends on other data. And I used MVC model in 
+the web back-end. Besides, I learned knowledge about the front-end development. 
+
+For the next days, I willcontinue watching videos about the web back-end. And I will start programming, 
+check details of function with Yingdi.
