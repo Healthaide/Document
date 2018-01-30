@@ -1,1 +1,336 @@
 Android Backend
+1.Requirement
+   Client:   
+1.1	Normal visitors have no access to content of the application. What they can access is the function of Log in or Register.
+
+1.2	All the functions are for members registered in the application
+1.2.1	Patient
+      Most patients are university students:
+1.	They want to consult doctors some issues on their health online.
+2.	They want to get prompt medical aid in a more efficient and effective way.
+3.	They want to understand relevant knowledge for preventing occurrences of some common or serious diseases via a normal and authoritative channel.
+4.	They want to manage their personal information.
+1.2.2	Doctor
+1.	They want to offer healthy assistances to patients as much as possible.
+2.	They want to communicate with other doctors, especially those medical experts as much as possible via multiple ways, like instant communication, video communication and shared meeting room.
+3.	They want to acquire some latest news, information and theses about medicine via an authoritative channel for making them enrich and realize the development of medical research.
+4.	They want to manage their personal information.
+
+1.2.3	Administrator
+1. They want to manage users (patient, doctor) data (account, password, gender, phone number….) in a reasonable and convenient way, such as automated monitor, automated log report, formatted table, Hierarchical file and remote access/ management.
+2. They want to use some online tools to help them manage feedback from users (patient, doctor) and recommended articles, such as Excel, Quick search, template and automated storage / backup.
+
+	Mobile:
+1.3	App
+1.3.1	Normal visitors fail to access anything in the system, except the function of log in/ Register
+
+1.3.2	All the functions are for member registered in the application
+1.3.2.1	Patient
+      		The functions patients can use via the App:
+	Functions	Explanations
+Search for symptoms	Searching medical resources according to symptoms
+News feed	Health tips and hot news about health care
+Self diagnosis	Searching health care for users’disease
+Hot topics	Showing recent hot topics and people’s comments
+Latest Articles	Showing latest articles
+Hot articles	Showing hot articles
+Departments	Classification of hospital’s departments
+Personal information	1.setting nickname
+2.showing account number, gender, distinct, address and university
+My doctor	Showing doctors users follow
+My news	Showing users interested news
+Setting and Help	1.Managing notifications
+2.Modifying password
+3.Rating for the App
+4.Updating App
+5.Help
+6.Statements of app
+Feedback	Feedback
+Doctor	1.Doctors’relevant information
+2.Communication with doctor
+3.Comments to the doctor
+Articles	1.Articles list
+2.Rating, Comments, Complaints
+Chatting	Intsantly chatting with doctor
+
+1.3.2.2	Doctor
+      			The functions doctors can use via the App:
+Functions	Explanations
+Latest articles	Latest articles
+Hot topics	Hot topics
+Communications	Recent logs of chattings with patents
+Personal information	Head portiat, account number, gender,distinct, hospital, position
+Setting and Help	1.Managing notifications
+2.Modifying password
+3.Rating for App
+4.Help
+5. Updating App
+6.Statements
+Feedback	Feedback
+
+1.3.2.3	Administrator    
+The functions administrator can use via the App: 
+Functions	Explanations
+Article management	Articles lists with modification options
+Feedback	Feedback received from users
+Doctor management	1. Insert doctor
+2. Doctor lists
+Topic aide	1.Issue a topic
+2.Push healthy tips
+Administrator	1. Log off: exit current account
+2. Modify current password
+Search	Search other functions
+
+2.system
+2.1	 Mobile-App
+system name 
+menu
+  highlight
+function zone(pic+)
+sign in and sign up (patient, doctor, administrator)
+administrator
+2.1.1	patient pages: (UI)
+2.1.1.1	Login page
+Three parts in the page:
+  1) Status bar
+  2) Navigation bar
+  3) content
+
+The Status bar includes network signal, battery situation, current time......
+
+The Navigation bar has a page title called "User Login".
+
+The content consists of four parallel content bars with different functions:
+1)	First row includes an image of man followed by an input field with hints “please enter account”.
+2)	Second row has an image of lock, followed by an input field with hints “Please enter password”.
+3)	Third row consists of a button with green of background color and text “Login”.
+4)	Final row covers two buttons with name of “Quick registration”,” Forgotten password” respectively in left and right side.
+
+Considering almost every interviewee is sensitive to their personal information and observing some popular applications of assistance in market, the content in the input field with password shows implicitly to user. Besides, the initial main style of color is green after 
+discussed with teammates due to green color gives individuals a feeling of peace and comfortable that may attract more users to use our app. Our team also use green as this application's main color.
+
+Based on above evaluations, there is an initial mockup for login interface designed by balsamiq mockup and see figure Login.
+
+2.1.1.2	Registration page
+Two parts in the page:
+  1) Status bar
+  2) Navigation bar
+  3) Content
+
+The Status bar is as same as that in Login page.
+  
+The Navigation bar has a page title called "registration" and a return key.
+
+The content consists of six parallel content bars with different functions:
+  1) a label named "phone number" followed by an input text with hints "please input correct phone number"
+  2) a label named "verified code" followed by an input text with hints "please input code you received". a button named "Acquire" is on the most 
+  right side
+  3) a label named "Password" followed by an input text with hints “please enter password”
+  4) a label named "Confirm" followed by an input text with hints "please enter password again"
+  5) a check box followed by a text "I agree with user protocol"
+  6) a button named "Register Now"
+
+Considering the security of our application and efficiency of the system, my team decide to take phone number as users' account number. Besides, to better manage the system, our team also need to verify the certification of phone number that users submit to registration via sending a verified code by phone number. What is more, to inform users better understand and use our system, our team provide user protocol for them.
+
+Based on above evaluations, there is an initial mockup for registration interface designed by balsamiq mockup and see figure Register.
+
+2.1.1.3	Resetting password page
+The layout of this page is same as Registration interface except the bottom button named as "Reset password".
+
+Based on above evaluations, there is an initial mockup for Resetting password interface designed by balsamiq mockup and see Reset_password.
+
+2.1.1.4	Home page
+Three parts in the page:
+1) Status bar
+					2) Content
+					3) Main menu bar
+
+The Status bar is as same as that in Login page.
+
+The content consists of four parallel content bars with different functions:
+5)	An input text as a search bar for checking articles in the left side and a button with a picture bell for notification management (system message, messages from doctor…) in another side.
+6)	A button named “self-diagnosis” in the left side and one named “life tips” for pushing relevant healthy knowledge, hot topics and others in another side.
+7)	A list with title “Hot topics” for reading the latest and hottest topics and give comments to a topic.
+8)	A list with title “Latest articles” for showing the latest three news to users.
+
+Main menu bar consists three parts:
+1) A button with picture house and name “Home” for showing the Home page.
+2) A button with picture compass and named “Department” for guiding users select corresponding department based on their own symptom.
+3) A button with picture man and named “Me” for users managing their own personal information.
+
+Based on above evaluations, there is an initial mockup for Home page designed by balsamiq mockup and see figure Home.
+
+2.1.1.5	Department page
+Three parts in the page:
+1) Status bar
+2) Navigation bar
+3) Content
+4) Main menu bar
+
+The Status bar is as same as that in Login page.
+
+The navigation bar has a label named “Department” in the medial and a button with a picture bell for notification management in the right side.
+
+The content consists of eleven buttons with pictures of departments of hospital and name of each department below the picture, and it shows on the screen based on order of four buttons in each row.
+
+The main menu bar is as same as that in Home page.
+
+Based on above evaluations, there is an initial mockup for Department page designed by balsamiq mockup and see figure Home.
+
+2.1.1.6	Me Page
+Three parts in the page:
+1) Status bar
+2) Content
+3) Maini menu bar
+
+The Status bar is as same as that in Login page.
+
+The content consists of six parallel content bars with different functions:
+1)	An image of user’s head portrait in the left, and a label of user’s nick name in the middle followed by a button with picture bell for notification management.
+2)	A label with name” My Doctor”, followed by a button of next arrow.
+3)	A label with name “News Collections” followed by a button of next indicator.
+4)	A label with name “Setting and Help” followed by a button of next indicator.
+5)	A label with name “Feedback” followed by a button of next indicator.
+6)	A label with name “Software Version number”.
+
+The main menu bar is as same as that in Home page.
+
+Based on above evaluations, there is an initial mockup for Me page designed by balsamiq mockup and see figure Me.
+
+2.1.1.7	Self-diagnosis page
+Three parts in the page:
+1) Status bar
+2) Navigation bar
+3) Content
+
+The Status bar is as same as that in Login page.
+
+The navigation bar consists of a return button followed by a page label named “Self-diagnosis” in the middle of the bar.
+
+The Content consists of two parallel content bars with different functions:
+1)	An input field with hints “Please enter symptoms”.
+2)	A label with name of “Potential causes to this symptom” followed by a list of causes that lead to this symptom.
+
+Based on above evaluations, there is an initial mockup for Self-diagnosis page designed by balsamiq mockup and see figure self-diagnosis.
+
+2.1.1.8	Topic center page
+Three parts in the page:
+1) Status bar
+2) Navigation bar
+3) Content
+
+The Status bar is as same as that in Login page.
+
+The navigation bar consists of a return button followed by a page label named “Topic center” in the middle of the bar.
+
+The Content consists of a variable list in which each element of list includes an image of a topic in the left and a label of topic’s title in the middle, followed by another label of follower number in the end.
+
+Based on above evaluations, there is an initial mockup for Topic center page designed by balsamiq mockup and see figure topic center.
+
+2.1.1.9	Topic page
+Three parts in the page:
+1) Status bar
+2) Navigation bar
+3) Content
+
+The Status bar is as same as that in Login page.
+
+The navigation bar consists of a return button followed by a page label named “Topic” in the middle of the bar.
+
+The Content consists of two parts:
+	1) An image of a topic in the left side, and a label of topic title, a button with name of “Follow”, followed by a brief introduction of this topic.
+	2) A variable list of users’ comments in which each element of list includes user’s head portrait, users’ nick name and users’ university.
+
+Based on above evaluations, there is an initial mockup for Topic page designed by balsamiq mockup and see figure topic.
+
+2.1.1.10	Latest Articles page
+Three parts in the page
+1) Status bar
+2) Navigation bar
+3) Content
+
+The Status bar is as same as that in Login page.
+
+The navigation bar consists of a return button followed by a page label named “Article List” in the middle of the bar
+
+The Content consists of a variable list of all latest articles in which each element of the list includes a label of article’s title, followed by another label of number of readers.
+
+Based on above evaluations, there is an initial mockup for Article List page designed by balsamiq mockup and see figure Article List.
+
+2.1.1.11	Article page
+Three parts in the page:
+1) Status bar
+2) Navigation bar
+3) Content
+
+The Status bar is as same as that in Login page.
+
+The navigation bar consists of a return button followed by a page label named “Article” in the middle of the bar
+
+The Content consists of three parallel content bars:
+	1) A label of the article’s title.
+	2) A label for displaying the time of the publication of this article, followed by another label for showing news’ source location.
+	3) A text area for showing the content of the article.
+
+Based on above evaluations, there is an initial mockup for Article page designed by balsamiq mockup and see figure Article.
+
+2.1.1.12	Doctor list page
+Three parts in the page:
+1) Status bar
+2) Navigation bar
+3) Content
+
+The Status bar is as same as that in Login page.
+
+The navigation bar consists of a return button followed by a page label named “Department” in the middle of the bar.
+
+The Content consists of a variable list of doctors from different hospitals, in which each element of list includes the image of the doctor and his/her name, work place and duties.
+
+Based on above evaluations, there is an initial mockup for Doctor List page designed by balsamiq mockup and see figure Doctor List.
+
+2.1.1.13	Doctor page
+Three parts in the page:
+1) Status bar
+2) Navigation bar
+3) Content
+
+The Status bar is as same as that in Login page.
+
+The navigation bar consists of a return button followed by a page label named “Doctor” in the middle of the bar.
+
+The Content consists of two parts:
+1)	An image of doctor in the left, and a label of doctor’s name, work place, duties, followed by two buttons named “Follow” and “Chatting”.
+2)	A variable list of all comments from patients.
+
+Based on above evaluations, there is an initial mockup for Doctor page designed by balsamiq mockup and see figure Doctor.
+
+2.1.1.14	Personal information page
+Three parts in the page:
+1) Status bar
+2) Navigation bar
+3) Content
+
+The Status bar is as same as that in Login page.
+
+The navigation bar consists of a return button followed by a page label named “Personal Information” in the middle of the bar.
+
+The Content consists of Seven parallel content bars of different functions:
+1)	A label of 
+2.1.1.15	
+2.1.1.16	
+2.1.1.17	
+2.1.1.18	
+2.1.2	Doctor page: (UI)
+
+2.1.3	Database: 
+   Table, (functions)
+
+ 2.2 Mobile
+   App,
+	2.2.1 Home
+
+   
+3.userhand
+
+4.test_report
+
