@@ -1,0 +1,199 @@
+Software Architecture
+
+1. C / S: Client / Servlet, for example, QQ is the CS structure
+Need to write server-side programs and client programs.
+Disadvantages: Update requires both ends, always ask the customer to download a new client program
+Advantages: safety is better
+
+B / S: Browser / Server
+Disadvantages: poor security
+Advantages: only need to write server-side program
+
+3. Web resources
+ * Static resources: html, css, javascript, pictures, etc;
+ * Dynamic resources: javaweb dynamic resources have jsp / servlet, other web programs dynamic resources are asp, php and so on.
+
+4. The difference between static resources and dynamic resources
+ * Client access server static resources, the server directly respond;
+ * Client access to server dynamic resources, the server needs to first dynamic resources into static resources, and then respond.
+
+Client access to the server through the browser
+ * http: // hostname: port number / path, for example: http://www.itcast.cn:80/index.html
+
+Web server
+ * Tomcat (Apache): Currently the most widely used JavaWeb server, support servlet rules, does not support the JavaEE specification;
+ * JBoss (Redhat Red Hat): Support JavaEE rules;
+ * GlassFish (Orcale): support servlet rules, the application is not very wide;
+ * Resin (Caucho): support JavaEE rules, more and more widely used;
+ * Weblogic (Orcale): Money! Support JavaEE rules for large projects
+ * Websphere (IBM): Money! Support JavaEE rules for large projects
+
+===================================
+===================================
+===================================
+
+Tomcat
+
+Tomcat6 support servlet2.5
+Tomcat7 support servlet3.0
+
+1. Start the shutdown tomcat
+  Need to configure JAVA_HOME
+  Double-click% CATALANA_HOME% \ bin \ startup.bat
+  Double-click% CATALANA_HOME% \ bin \ shutdown.bat
+
+Visit the server: http: // localhost: 8080 / index.jsp
+  Because the server is on this machine, the host name is localhost, which means native
+  The default port for tomcat is 8080
+  index.jsp is the home page
+
+Modify the port number
+  * Modify the port number,% CATALANA_HOME% \ conf \ server.xml, modify <Connector port = "8080">, the 8080 can be modified.
+  * http protocol default port is 80, that is to say http: // localhost, equivalent to http: // localhost: 80
+
+  If you change the Tomcat port number to 80, then the access server can no longer need to give the port number.
+
+3. Tomcat directory structure
+
+ * bin: Binary executables such as startup.bat and shutdown.bat
+ * conf: configuration file, for example: server.xml, context.xml, web.xml, tomcatusers.xml
+ * lib: tomcat required jar package
+ * logs: log files
+ * Temp: temporary files stored tomcat run-time, when tomcat is closed, the files in this directory can be deleted
+ * webapps: Each folder in this directory corresponds to a JavaWeb application
+ * Work: webapps under the application will automatically generate files at run time, in the work directory. Work directory deleted no problem, but run the application again to generate work directory and files.
+
+4. Create JavaWeb directory: hello
+ * In the webapps directory to create a hello directory, hello directory is the project directory;
+ * Create WEB-INF in the hello directory
+ Create web.xml under WEB-INF
+ Create a classes directory under WEB-INF
+ Create a lib directory under WEB-INF
+ Create index.html in the hello directory
+
+In the web.xml file add the following:
+<? xml version = "1.0" encoding = "UTF-8"?>
+<web-app version = "2.5"
+xmlns = "http://java.sun.com/xml/ns/javaee"
+xmlns: xsi = "http://www.w3.org/2001/XMLSchema-instance"
+xsi: schemaLocation = "http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd ">
+</ web-app>
+
+Add the following in index.html:
+<html>
+  <head> <title> index.html </ title> </ head>
+  <body>
+    <h1> hello homepage </ h1>
+  </ body>
+</ html>
+Start tomcat, open the client to visit http: // localhost: 8080 / hello / index.html
+
+===================================
+
+Configure external applications
+External applications are not put the application into Tomcat's wabapps directory! It has been placed outside, for example: F: / hello
+
+1. In conf / server.xml configuration, specify the path of external applications.
+
+<Host name = "localhost" appBase = "webapps"
+      unpackWARs = "true" autoDeploy = "true">
+      <Context path = "itcast_hello" docBase = "F: / hello" />
+</ Host>
+
+  * Add the <Context> element under the <Host> element, where path is the URL access path and docBase is the directory for external applications.
+  * In the browser address bar visit: http: // localhost: 8080 / itcast_hello / index.html
+
+2. Conf / catalana / localhost add configuration files, specify the external application path
+  * Create the itcast_hello.xml file in the conf / catalana / localhost directory, where itcast_hello is the URL access path
+  * Add in the itcast_hello.xml file: <Context docBase = "F: / hello" />, docBase Specifies the directory for external applications.
+
+3. Default web application
+  * There is a ROOT directory in the webapps directory, which is the default web application, the path to the application: http: // localhost: 8080 / index.jsp
+  * If the web application inside the webapps / ROOT, visit the URL path without giving the application name.
+
+4. Configure the virtual host
+  Hope: http: //www.itcast.cn visit web applications.
+  * This need to map the domain name http://www.itcast.cn IP address: 127.0.0.1
+  * Need to modify the tomcat port number 80
+  * Need to configure the host in server.xml, and specify the host's application directory
+  * Add a web application named ROOT in the app directory.
+
+  1) Find the C: \ WINDOWS \ system32 \ drivers \ etc \ hosts file, add 127.0.0.1 http://www.itcast.cn
+  2) Change the port to 80 in conf / server.xml
+  3). Add the <Host> element to conf / server.xml
+<Host name = "www.itcast.cn" appBase = "F: / myapps" unpackWARs = "true" autoDeploy = "true">
+</ Host>
+    * name: Specifies the host domain name is www.itcast.cn
+    * appBase: specify the host's application directory F: / myapps
+  4) Create a web application called ROOT under F: / myapps.
+
+  Visit: http://www.itcast.cn/index.html
+  Which www.itcast.cn in this machine will be resolved to 127.0.0.1, but other computer access invalid.
+
+===================================
+
+Create a Web project with MyEcipse
+
+MyEclipse specifies Tomcat
+MyEclipse create a Web project
+3. MyEclipse release Web project to Tomcat
+4. MyEclipse start to close Tomcat
+5. MyEclipse has released changes to the project under tomcat will be modified
+
+MyEcipse JavaWeb application development environment, not the operating environment! Running or running under Tomcat.
+
+Use MyEclipse fight war package, the war package released to Tomcat.
+
+===================================
+
+Tomcat management page
+
+===================================
+===================================
+===================================
+
+HTTP protocol
+
+1. Install HttpWatch
+
+Http protocol
+  * Hypertext Transfer Protocol. It specifies the rules for communication between the browser and the server.
+  * http is based on the request / response mode, so divided into the request protocol and response protocol
+
+===================================
+
+request
+
+Request content is the data sent to the server client!
+
+1. Request format:
+  * Request the first line
+  * Request header
+  * Blank line
+  * Request body (or called the request body)
+
+2. request method
+  * Common request methods are GET and POST
+  * Sending a request in the browser's address bar and clicking on a hyperlink is a GET request
+  * Submit form can send GET request, as well as POST request
+  GET request has no request body, but blank line is there
+  * POST request exists in the body of the request
+
+3. Use HttpWatch for request information
+  * Request line: request method request path request protocol and version, for example: GET /hello/index.jsp HTTP / 1.1
+  * Request header: request header is some key, the format is: header: value, for example: Host: localhost
+  * Empty line: is a blank line, used to separate the request body
+  * Request body: The GET method does not have a request body. The POST body has a request body. The body of the request body is: Parameter name = parameter value & parameter name = parameter value, where the parameter value is Chinese and URL encoding is used.
+
+4 common request header
+  Host: The requested server host name
+  * User-Agent: client browser and operating system-related information
+  * Accept-Encoding: data compression format supported by the client
+  * Connection: the client supports the connection
+  * Cookie: the client sent to the server "little dessert", it is hosted on the client's server. If the currently visited server does not register something on the client, then it will not exist!
+  * Content-Length: The length of the request body
+  * Referer: The address of the current request, for example, in the browser address bar direct access to the server, then there is no such request header. If you click the link on the www.baidu.com page to access the server, then the value of this header is www.baidu.com
+    > Role 1: Sources of Statistics
+    > Role 2: security chain
+  * Content-Type: If the POST request, there will be this header, the default value for the application / x-www-form-urlencoded, said the body content using url encoding
