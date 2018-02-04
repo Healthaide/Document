@@ -1,0 +1,17 @@
+Week 2 Reflective report
+
+This week, I used sublime text3 as code editor, it has code highlighting, syntax prompt and automatically completing. Sublime text3 has not only gorgeous interface but also plug-in extension mechanism. It is absolutely a pleasure to write code with it. I installed some popular plug-in:
+	1. Emmet: The front-end artifact. A toolbox component that can greatly improve the efficiency of web developers' HTML and CSS.
+	2. CSS3: It has syntax highlighting and syntax hints, but it is lack of the highlighting of private property of the excursion.
+	3. CSS Extended Completions:  Associating with CSS files, intelligently prompting its class name.
+	4. JavaScript Completions: Supporting JavaScript native syntax hints.
+	5. JQuery: A sample code section for most of the methods of jQuery is provided to make the API of jQuery easier to use.
+	6. ColorHighlighter: It can show the real color of the color code you choose (like "#FFFFFF", "RGB (255255255)", "white"). It also contains a color selector that allows you to easily change the color.
+	7. BracketHighlighter: Parentheses and labels are displayed at a level that don't have to worry about which code is a piece of code that the selected code belongs to.
+	8. Align Tab: Using regular expressions to help code alignment, such as a few lines of code aligned with a “=”.
+	9. Colorsublime: After the installation is completed, you can enter Install Theme and replace the theme online. There are hundreds of topics in the subject library, which is useful.
+
+Besides, I continue watched some lecture videos that related with web UI design. I competed the code of login, article publishing, article management and comment management interface through discussing with Xin. Our tutor asked us to improve our interface by reducing its loading time, referring our design to GitHub and adding more data.
+
+In the next week, I will try to finish our UI code and if there are extra time I will use some online template to re-beautify it.
+
