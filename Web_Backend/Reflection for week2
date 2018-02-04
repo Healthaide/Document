@@ -1,0 +1,111 @@
+Servlet overview
+Life cycle method:
+	void init (ServletConfig): after birth (1 time);
+	void service (ServletRequest request, ServletResponse response): Each request will be called;
+	void destroy (): before death (1 time);
+
+characteristic:
+A singleton, a class has only one object; of course there may be multiple Servlet classes!
+The thread is not a case, so its efficiency is high!
+
+Servlet class is written by myself, but the object is created by the server, and the server to call the appropriate method.
+
+
+1 What is Servlet
+Servlet JavaWeb is one of the three major components, it is a dynamic resource. The role of Servlet is to handle the request, the server will receive the request to the Servlet to deal with, and usually in the Servlet it needs:
+	Receive request data
+	Processing requests
+	Complete the response.
+For example, the client sends a login request, or output registration request, these requests should be Servlet to complete the processing! Servlets need our own to write, each Servlet must implement javax.servlet.Servlet interface.
+
+2 way to achieve Servlet
+There are three ways to implement Servlet:
+	Implement javax.servlet.Servlet interface;
+	Inherit javax.servlet.GenericServlet class;
+	Inherit javax.servlet.http.HttpServlet class;
+
+3 Create helloservlet application
+Steps: (1) create the helloservlet directory in the webapps directory, which is our application directory, and then create the required content for preparing JavaWeb applications in the helloservlet directory:
+Create / helloservlet / WEB-INF directory;
+Create / helloservlet / WEB-INF / classes directory;
+Create / helloservlet / WEB-INF / lib directory;
+Create /helloservlet/WEB-INF/web.xml file;
+
+(2)Servlet needs to be completed in two steps:
+Write Servlet class;
+Configure the servlet in the web.xml file
+
+HelloServlet.java
+public class HelloServlet implements Servlet {
+	public void init(ServletConfig config) throws ServletException {}
+	public ServletConfig getServletConfig() {return null;}
+	public void destroy() {}
+	public String getServletInfo() {return null;}
+
+	public void service(ServletRequest req, ServletResponse res)
+			throws ServletException, IOException {
+		System.out.println("hello servlet!");
+	}
+}
+
+web.xml
+	<servlet>
+		<servlet-name>hello</servlet-name>
+		<servlet-class>cn.itcast.servlet.HelloServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>hello</servlet-name>
+		<url-pattern>/helloworld</url-pattern>
+	</servlet-mapping>  
+
+The purpose of the configuration servlet in the web.xml is actually only one, that is, the access path and a Servlet bound together, the above configuration is the access path: "/ helloworld" and "cn.itcast.servlet.HelloServlet" bound together .
+	<servlet>: Specifies the name of the servlet named HelloServlet hello;
+	<servlet-mapping>: Specified / helloworld access path so visit the servlet named hello.
+	<servlet> and <servlet-mapping> are related by the <servlet-name> element
+
+(3)Next, compile the HelloServlet, note that you need to import the servlet-api.jar when compiling the HelloServlet because Servlet.class and others are in servlet-api.jar.
+(4)Then HelloServlet.class into / helloworld / WEB-INF / classes / directory, 
+(5)Start Tomcat, visit in the browser: Http: // localhost: 8080 / helloservlet / helloworld can see the output on the console.
+
+
+Servlet interface
+
+1 Servlet life cycle
+Methods related to the servlet life cycle are:
+	void init (ServletConfig);
+	void service (ServletRequest, ServletResponse);
+	void destroy ();
+
+1.1 Servlet's birth
+The server will create the servlet the first time the servlet is accessed, or create the servlet at server startup. If the server is started to create a Servlet, then also need to be configured in the web.xml file. This means that by default, the servlet is created by the server when it is first accessed.
+
+And a Servlet type, the server creates only one instance of the object, for example, the first time you visit http: // localhost: 8080 / helloservlet / helloworld, the server through the "/ helloworld" found the binding servlet name cn.itcast.servlet. HelloServlet, and then the server to see whether this type of servlet has been created, if not created, then the server will reflect to create a HelloServlet instance. When visit http: // localhost: 8080 / helloservlet / helloworld again, the server will not create a HelloServlet instance again, but will use the instance created last time.
+
+Servlet is created, the server will immediately call the Servlet void init (ServletConfig) method. Remember, Servlet will be called immediately after the birth of the init () method, but also the life of a Servlet. This method will only be called once. 
+
+1.2 Servlet service
+Each time the server receives a request, it invokes the servlet's service () method to process the request. The server receives a request, it will call the service () method once, so the service () method will be called multiple times. Because of this, we need to write the code that handles the request to the service () method!
+
+1.3 Servlet to leave
+Servlet will not easily leave, usually when the server is off Servlet will leave! When the server is shut down, the server will destroy the servlet. Before the servlet is destroyed, the server will first call the servlet's destroy () method. We can put the servlet's last word in the destroy () method, such as the release of some resources Put the code in the destroy () method.
+
+1.4 test life cycle approach
+public class HelloServlet implements Servlet {
+	public void init(ServletConfig config) throws ServletException {
+		System.out.println("Servlet is created ");
+	}
+	public ServletConfig getServletConfig() {return null;}
+	public void destroy() {
+		System.out.println("Servlet is gone");
+	}
+	public String getServletInfo() {return null;}
+
+	public void service(ServletRequest req, ServletResponse res)
+			throws ServletException, IOException {
+		System.out.println("hello servlet!");
+	}
+}
+The init method is executed on the first HelloServlet, and the service method is also executed. When you visit again, only the service method is executed and the init method is no longer executed. The destroy method is called when Tomcat is closed.
+
+This week, I start to implement codes about login, operations on articles and feedback from users and data transmission, and discuss the detail of webpage with Yingdi.
+And I will continue to study the learning video for web back-end and make improvements.
