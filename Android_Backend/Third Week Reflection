@@ -1,0 +1,257 @@
+JavaWeb listener
+Three major components:
+Servlet
+Listener
+ Filter
+
+Listener: Listener
+First meet: AWT
+Second meet: SAX
+
+Listener:
+ It is an interface, the content is realized by us;
+It needs to be registered, for example registering on the button!
+Listener method, will be called when a special event occurs!
+
+Observer:
+ Event source
+ Thief
+Event
+ steal things
+Listener
+ Police
+ Listener method: arrest
+
+Listener in JavaWeb
+ Event Source: Three major fields!
+ ServletContext
+• Lifecycle snooping: ServletContextListener, which has two methods, one called at birth and one called on death;
+ void contextInitialized (ServletContextEvent sce): when creating SErvletcontext
+ void contextDestroyed (ServletContextEvent sce): Destroy Servletcontext
+Attribute listener: ServletContextAttributeListener, which has three methods, one called when adding properties, one called when the property is replaced, the last one is called when the property is removed.
+Void attributeAdded (ServletContextAttributeEvent event): when adding attributes
+ void attributeReplaced (ServletContextAttributeEvent event): when replacing attributes
+Void attributeRemoved (ServletContextAttributeEvent event): remove the attribute;
+ HttpSession
+• Lifecycle snooping: HttpSessionListener, which has two methods, one called at birth and one called on death;
+ void sessionCreated (HttpSessionEvent se): create session
+Void sessionDestroyed (HttpSessionEvent se): Destroy the session
+• Property listener: HttpSessioniAttributeListener, which has three methods, one is called when adding properties, the other is called when the property is replaced, and the last one is called when the property is removed.
+Void attributeAdded (HttpSessionBindingEvent event): when adding attributes
+Void attributeReplaced (HttpSessionBindingEvent event): when replacing the attribute
+Void attributeRemoved (HttpSessionBindingEvent event): remove attribute
+ ServletRequest
+• Life-cycle snooping: ServletRequestListener, which has two methods, one called at birth and one called on death;
+ void requestInitialized (ServletRequestEvent sre): create request
+Void requestDestroyed (ServletRequestEvent sre): Destroy the request
+Attribute listener: ServletRequestAttributeListener, which has three methods, one called when adding properties, one called when the property is replaced, the last one is called when the property is removed.
+Void attributeAdded (ServletRequestAttributeEvent srae): when adding attributes
+Void attributeReplaced (ServletRequestAttributeEvent srae): when replacing attributes
+Void attributeRemoved (ServletRequestAttributeEvent srae): remove attribute
+ JavaWeb to complete the preparation of the listener:
+ write a listener class: Requirements must be to achieve a listener interface;
+ registration, is configured in web.xml to complete the registration!
+ Event Object:
+ServletContextEvent: ServletContext getServletContext ()
+ HttpSessionEvent: HttpSession getSession ()
+ ServletRequest:
+ServletContext getServletContext ();
+ServletReques getServletRequest ();
+ ServletContextAttributeEvent:
+ServletContext getServletContext ();
+String getName (): Get the property name
+Object getValue (): Gets the value of the property
+ HttpSessionBindingEvent: slightly
+ ServletRequestAttributeEvent: slightly
+
+Perception monitoring (all related to HttpSession)
+ It is used to add to the JavaBean instead of adding to the three domains!
+Neither of these listeners need to be registered in web.xml!
+
+HttpSessionBindingListener: added to the javabean, javabean know whether they added to the session.
+
+
+1 JavaWeb listener overview
+The source of the event that is being monitored in JavaWeb is: ServletContext, HttpSession, ServletRequest, that is, three major domain objects.
+Listen to the listeners for creating and destroying domain objects
+Listen for the listener of domain attribute "Operation Domain Properties"
+Listen to HttpSession listeners.
+
+2 Create and destroy listeners
+There are three create and destroy listeners:
+ServletContextListener: Tomcat calls the following two methods on startup and shutdown
+Public void contextInitialized (ServletContextEvent evt): ServletContext object is called after it is created;
+ public void contextDestroyed (ServletContextEvent evt): ServletContext object is destroyed before calling;
+ HttpSessionListener: start the session and end the session call the following two methods
+Public void sessionCreated (HttpSessionEvent evt): The HttpSession object is called after it is created;
+Public void sessionDestroyed (HttpSessionEvent evt): called before the HttpSession object is destroyed;
+ServletRequestListener: The following two methods are invoked when starting a request and ending a request
+Public void requestInitiallized (ServletRequestEvent evt): ServletRequest object is called after the creation;
+Public void requestDestroyed (ServletRequestEvent evt): ServletRequest object is destroyed before calling.
+main content:
+1. JSP foundation
+2. Cookie
+HttpSession
+
+================================
+
+JSP foundation
+
+1. jsp role:
+  * Servlet:
+    > Disadvantages: not suitable for setting html response body, requires a lot of response.getWriter (). Print ("<html>")
+    > Advantages: Dynamic resources, can be programmed.
+  * html:
+    > Disadvantages: html is a static page, can not contain dynamic information
+    > Pros: Do not worry about outputting html tags
+  * jsp (java server pages):
+    > Advantages: add java script on the basis of the original html, constitute jsp page.
+
+2. jsp and Servlet division of labor:
+  * JSP:
+    > Launch page as a request, such as displaying a form, hyperlink.
+    > As the request end page, for example, display data.
+  * Servlet:
+    > As part of the request processing data.
+
+3. The composition of jsp
+  * jsp = html + java script + jsp tag (instruction)
+  * There are 9 objects that can be used without creating in jsp, called 9 built-in objects. For example: request object, out object
+  * 3 kinds of java script:
+    > <% ...%>: java code fragment (commonly used), used to define 0 ~ N Java! What can be written within the method, it can put what!
+    > <% = ...%>: java expression for output (common) used to output the result of an expression (or variable). response.getWriter (). print (...); What can be put here, it can put what!
+    > <%! ...%>: statement, used to create a class member variables and member methods (basic do not have, but easy to test), the body can put what, it can put what!
+
+
+    Case: demo jsp java script!
+    Case: Demo jsp and servlet division of labor!
+
+4. jsp principle (understanding)
+  jsp is actually a special servlet
+    > When jsp page is accessed for the first time, the server will jsp compiled into java files (the java is actually a servlet class)
+    > Then java compiled into. Class
+    > Then create this type of object
+    > Finally call its service () method
+    > The second request the same jsp, direct call service () method.
+  * Tomcat's work directory can be found jsp corresponding. Java source code.
+  * View jsp corresponding java file:
+    > java script
+    > html
+Jsp notes
+  * <% - ... -%>: When the server jsp compiled into java files have ignored the comment section!
+  <! - fdsafdsa ->: html comment
+
+=================================
+
+Cookie
+
+1. Http agreement and Cookie (understanding)
+  * Cookie is developed by the HTTP protocol! The first server to save the cookie to the browser, and then the browser requests the server the next time the request was Cookie and then returned to the server
+  * Created by the server to save a key-value pair to the client browser! Server save cookie response header: Set-Cookie: aaa = AAA Set-Cookie: bbb = BBB
+    > response.addHeader ("Set-Cookie", "aaa = AAA"); response.addHeader ("Set-Cookie", "bbb = BBB");
+  * When the browser requests the server, the server will save the cookie with the request sent to the server. Cookie request header returned by the browser: Cookie: aaa = AAA; bbb = BBB
+  * Http agreement (to ensure that not to the browser too much pressure):
+    > 1 cookie up to 4KB
+    > 1 server Saves up to 20 cookies to 1 browser
+    > 1 browser can save up to 300 cookies
+  * Browser Wars: Because browser competition is very exciting, so many browsers will violate the HTTP rules within a certain range, but it will not make a cookie 4GB!
+
+2. The purpose of the cookie
+  * The server uses cookies to keep track of client status!
+  * Save the shopping cart (the product in the cart can not be saved using the request, because it is a user to send multiple requests to the server information)
+  * Show the last login name (also a user multiple requests)
+
+  ********** Cookie is not cross-browser! ***********
+
+3. JavaWeb use cookies
+  * The original way (understanding):
+    > Use response to send Set-Cookie response header
+    > Use request to get Cookie request header
+  * Convenience (proficient):
+    > Use the repsonse.addCookie () method to save cookies to your browser
+    > Use the request.getCookies () method to get the cookie returned by the browser
+
+  Cookie first example:
+    > A jsp save cookie, a.jsp
+    > Another jsp get the cookie returned by the browser! b.jsp
+
+Cookie details
+  * Cookie not only name and value of two properties
+  * MaxAge of the cookie: The maximum life of the cookie, which is the maximum amount of time the cookie can be stored. In seconds, for example: cookie.setMaxAge (60) indicates that the cookie will be saved by the browser to the hard disk for 60 seconds
+    > maxAge> 0: The browser will save the cookie to the client's hard disk, the value of the effective time maxAge decision.
+    > maxAge <0: Cookie exists only in the browser memory, when the user closes the browser, the browser process ends, and the cookie dies.
+    > maxAge = 0: browser will immediately delete this cookie!
+  * Cookie's path (understanding):
+    > Cookie path is not set this cookie in the client's save path! ! !
+    > Cookie path set by the server to create a cookie
+    > When the browser to visit a certain path server, which cookies need to be returned to the server? This is determined by the cookie's path.
+    > Browser to access the server's path, if the path contains a cookie, it will return this cookie.
+    > For example:
+      <> aCookie.path = / day11_1 /; bCookie.path = / day11_1 / jsps /; cCookie.path = / day11_1 / jsps / cookie /;
+      <> Visit: /day11_1/index.jsp, return: aCookie
+      <> Visit: /day11_1/jsps/a.jsp, return: aCookie, bCookie
+      <> Visit: /day11_1/jsps/cookie/b.jsp, return: aCookie, bCookie, cCookie
+    > Cookie path default value: the path of the current access path. For example, in response to a cookie when accessing /day11_1/jsps/a.jsp, the default path for this cookie is / day11_1 / jsps /
+  * Cookie's domain (understanding)
+    > domain is used to specify the domain name of the cookie! Useful when sharing cookies in multiple second-level domains.
+    > For example; www.baidu.com, zhidao.baidu.com, news.baidu.com, tieba.baidu.com shared Cookie can use the domain
+    > Set the domain to: cookie.setDomain (". Baidu.com");
+    > Set path to: cookie.setPath ("/");
+
+
+Cookie can not exist in Chinese! ! !
+
+// Save
+Cookie c = new Cookie ("username", URLEncoder.encode ("Joe Smith", "utf-8")); // Error!
+response.addCookie (c);
+
+// Obtain
+Cookie [] cs = request.getCookies ();
+if (cs! = null) {
+  for (Cookie c: cs) {
+    if ("username" .equals (c.getName ())) {
+      String username = c.getValue ();
+      username = URLDecoder.decode (username, "utf-8");
+    }
+  }
+}
+
+============================================
+
+HttpSession (*****)
+
+1. HttpSession overview
+  HttpSession is a class provided by JavaWeb for session tracking. Session is a server-side object, stored on the server side! ! !
+  HttpSession is one of the three servlet domain objects (request, session, application (ServletContext)), so it also has setAttribute (), getAttribute (), removeAttribute
+  * HttpSession underlying rely on cookies, or URL rewriting!
+
+HttpSession role
+  * Session range: Session scope is a user from the first visit to the server, until the user closes the browser end!
+    > Conversation: A user's request for multiple coherence of the server! The so-called coherence request, that is, the user repeatedly requests the middle did not close the browser!
+  * The server creates a session object for each client. The session is like the client's server-side account. They are saved by the server to a Map, which is called the session cache!
+    > Servlet session object: HttpSession session = request.getSession ();
+    > Jsp session object: Session is built under the jsp object, you can create without using!
+  * session domain related methods:
+    > void setAttribute (String name, Object value);
+    > Object getAttribute (String name);
+    void removeAttribute (String name);
+
+Case 1: Demo session session shared requests in multiple requests
+  * AServlet: save data to the session domain
+  * BServlet: get data from the session domain
+  * Demo:
+    > The first request: visit AServlet
+    > The second request: visit BServlet
+
+4. Case 2: Demo Save User Login Information (Proficient)
+  * Case Related Pages and Servlets:
+    > login.jsp: login page
+    > succ1.jsp: The page that can be accessed only if the login is successful
+    > succ2.jsp: pages that can be accessed only if the login is successful
+    LoginServlet: Verify that the user is logged in successfully!
+  * Pages and Servlet content:
+    > login.jsp: provide login form, submit form request LoginServlet
+    > LoginServlet: Get request parameters, verify that the user is logged in successfully
+      <> Failure: Save the error message to the request field, forward to login.jsp (login.jsp error message request domain)
+      <> Success: save user information to the session domain, redirect to succ1.jsp page, display the user information in the session domain
+    > succ1.jsp: Get user information from the session field, if not, "You have not logged in." There is then
