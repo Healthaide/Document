@@ -1,1 +1,98 @@
-This week
+1 response overview
+The response is a parameter of the Servlet.service method of type javax.servlet.http.HttpServletResponse. When the client makes each request, the server creates a response object and passes it to the Servlet.service () method. Response object is used to respond to the client, which shows that the service () method using the response object can complete the response to the client.
+Response object function is divided into the following four:
+   set response header information;
+   send status code
+   set the response body;
+   redirect
+
+2 response response body
+Response is the response object, the output to the client response body (response body) can use the response response stream, repsonse provided a total of two response stream objects:
+PrintWriter out = response.getWriter (): Get the character stream;
+ServletOutputStream out = response.getOutputStream (): Get the byte stream;
+
+Of course, if the response body is a character, then use response.getWriter (), and if the response is a byte, for example when downloading, then use response.getOutputStream ().
+Note that in a request, you can not use both streams! That is, you either use repsonse.getWriter () or use response.getOutputStream (), but you can not use both streams at the same time. Otherwise it will throw an IllegalStateException exception.
+
+2.1 character response stream
+   Character encoding
+When using response.getWriter (), be aware that the default character encoding is ISO-8859-1. If you want to set the character encoding of character streams to utf-8, use response.setCharaceterEncoding ("utf-8"). This ensures that the characters output to the client are encoded using UTF-8!
+But the client browser does not know what the response data encoding! The response.setContentType ("text / html; charset = utf-8") method works better if you want to inform the client to interpret the response data using UTF-8, since this method will not only call response.setCharaceterEncoding ("utf- 8 "), a content-type response header is also set, and the client browser interprets the response data using the content-type header.
+
+  Buffer
+response.getWriter () is of type PrintWriter, so it has a buffer, the default size of the buffer is 8KB. In other words, before the response data is not output 8KB, the data is stored in the buffer, and not immediately sent to the client. When Servlet execution is over, the server will go to refresh the stream so that the data in the buffer is sent to the client.
+If you want the response data to be sent to the client right away:
+    Write more than 8KB of data to the stream;
+    call response.flushBuffer () method to manually refresh the buffer;
+    
+3 Set the response header information
+You can use the response object setHeader () method to set the response header! The response headers set using this method will eventually be sent to the client browser!
+    response.setHeader ("content-type", "text / html; charset = utf-8"): Set the content-type response header, the role of the header is to tell the browser response content is html type, encoded as utf-8 . And at the same time will set the response character stream encoding utf-8, namely response.setCharaceterEncoding ("utf-8");
+    response.setHeader ("Refresh", "5; URL = http: //www.itcast.cn"): 5 seconds after the automatic jump to Chuanzhi home page.
+
+4 Set the status code and other methods
+   response.setContentType ("text / html; charset = utf-8"): Equivalent to calling 
+   response.setHeader ("content-type", "text / html; charset = utf-8");
+   response.setCharacterEncoding ("utf-8"): Set character response stream character 
+   encoding utf-8;
+   response.setStatus (200): set the status code;
+   response.sendError (404, "The resource you are looking for does not exist"): When 
+   sending an error status code, Tomcat will jump to a fixed error page, but an error 
+   message may be displayed.
+
+5 redirect
+5.1 What is redirection
+When you visit http://www.sun.com, you will find that the URL in your browser's address bar will become http://www.oracle.com/us/sun/index.htm, which is redirected .
+Redirection is the server to inform the browser to visit another address, and then make another request.
+
+5.2 Complete the redirection
+A response code of 200 indicates a successful response, and a response code of 302 indicates a redirect. So the first step to complete the redirect is to set the response code to 302.
+Because redirection tells the browser that the second request is made, the browser needs to know the URL of the second request so the second step in completing the redirect is to set the Location header and specify the URL address of the second request.
+
+=========================================================================================================================================================================================================================================================================
+
+1 request overview
+request is a parameter to the Servlet.service () method of type javax.servlet.http.HttpServletRequest. When the client makes each request, the server creates a request object and encapsulates the request data into the request, which is then passed to the 
+service () method when the Servlet.service () method is called, indicating that in the service () method The request object can be obtained through the request data.
+ 
+The function of the request can be divided into the following categories:
+    encapsulate the request header data
+    package request body data, if GET request, then there is no body;
+    request is a domain object, you can add it as a Map to obtain data;
+    request provides the request forwarding and request inclusion features.
+
+2 request domain method
+request is a domain object! In JavaWeb a total of four domain objects, including ServletContext domain object, which only creates a ServletContext object throughout the application. request one of them, request can share data in one request.
+A request will create a request object, if experienced in a request multiple servlets, then multiple Servlet can use the request to share data. Now we do not know how to deal with a Servlet in a request, behind the learning request forwarding and request is known.
+Here is the request of the domain method:
+ 
+    void setAttribute (String name, Object value): used to store an object can also be called to store a domain attribute, for example: servletContext.setAttribute ("xxx", "XXX"), save a domain attribute in the request , Domain attribute name xxx, domain attribute 
+    value XXX. Note that calling this method multiple times and using the same name overrides the last value, the same behavior as Map;
+    Object getAttribute(String name)：used to obtain data from request, and it need to be stored first.For example: String value = (String) request.getAttribute ("xxx") ;, get the name of xxx domain attribute
+    void removeAttribute (String name): used to remove the domain attribute in the request, if the attribute specified by the parameter name does not exist, then this method does nothing;
+    Enumeration getAttributeNames (): get the name of all domain attributes;
+
+3 request request header data
+Request and request header related methods are:
+   String getHeader (String name): Get the request header of the specified name;
+   Enumeration getHeaderNames (): get all the request header name;
+Int getIntHeader (String name): get the value of the type of request header.
+
+4 request Get the request related to other methods
+The request also provides other methods related to the request, some of which are designed to make it easier for us to request header data, and some are related to the request URL.
+   Int getContentLength (): Get the number of bytes in the request body, GET request without the request body, no request body returns -1;
+   String getContentType (): get the request type, if the request is GET, then this method returns null; if it is POST request, then the default is application / x-www-form-urlencoded, said the request body content using URL encoding;
+   String getMethod (): returns the request method, for example: GET
+   Locale getLocale (): Returns the current client browser Locale. java.util.Locale that country and language, this thing is very useful in internationalization;
+   String getCharacterEncoding (): Get the request encoding, if there is no setCharacterEncoding (), then return null, that the use of ISO-8859-1 encoding;
+   void setCharacterEncoding (String code): Set the request encoding, valid only on the request body! Note that there is no body for GET! ! ! So this method can only be valid for the parameters in the POST request!
+   String getContextPath (): return the context path, for example: / hello
+   String getQueryString (): Returns the parameters in the request URL, for example: name = zhangSan
+   String getRequestURI (): return request URI path, for example: / hello / oneServlet
+   StringBuffer getRequestURL (): returns the request URL path, for example: http: // localhost / hello / oneServlet, that is, return path information other than the parameters;
+   String getServletPath (): Return the servlet path, for example: / oneServlet
+   String getRemoteAddr (): returns the current client's IP address;
+   String getRemoteHost (): return the current client's host name, but the realization of this method or get IP address;
+   String getScheme (): Returns the request protocol, for example: http;
+   String getServerName (): return the host name, for example: localhost
+   int getServerPort (): returns the server port number, for example: 8080
