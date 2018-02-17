@@ -1,0 +1,135 @@
+1 What is JSTL
+JSTL is apache extension of the EL expression (that is, JSTL dependent EL), JSTL is a tag language! JSTL tag has been very convenient to use, it is bound with the JSP action label, but it is not a JSP built-in tags, we need to guide package, as well as specify the tag library only!
+If you are using MyEclipse to develop JavaWeb, when publishing your project to Tomcat, you will find that MyEclipse will store jstl's Jar package in the lib directory! If you do not use MyEclipse development then need to import this JSTL Jar package: jstl-1.2.jar.
+
+2 JSTL tag library
+JSTL contains a total of four tag libraries:
+   core: the core tag library, the focus of our learning
+   fmt: format tag library, you only need to learn two labels;
+   sql: database tag library, do not need to learn, it is out of date;
+   xml: xml tag library, do not need to learn, it is outdated.
+
+3 Import the tag library using the taglib directive
+In addition to JSP action tags, the use of other third-party tag libraries require:
+ guide package
+Use the taglib command to import a tag library in a JSP page that uses tags
+
+Here's the JSTL's core tag library:
+<% @ taglib prefix = "c" uri = "http://java.sun.com/jstl/core"%>
+
+   prefix = "c": specify the prefix of the tag library, the prefix can be casually given value, but we will use the core tag library prefix specified as c;
+   uri = "http://java.sun.com/jstl/core": Specifies the uri of the tag library, which is not necessarily the real URL, but it allows the JSP to find the description of the tag library;
+   
+4 core tag library commonly used labels
+4.1 out and set
+Out
+<c: out value = "aaa" /> -Outputs aaa string constants
+<c: out value = "$ {aaa}" /> -Same as $ {aaa}
+<c: out value = "$ {aaa}" default = "xxx" /> -When $ {aaa} does not exist, the xxx string is output
+<%request.setAttribute ("a", "<script> alert ('hello'); </ script>");%>
+<c: out value = "$ {a}" default = "xxx" escapeXml = "false" /> -When escapeXml is false, "<" and ">" are not translated. This may be subject to JavaScript attacks.
+
+set
+<c: set var = "a" value = "hello" /> -Add a name, a value of hello data to the pageContext.
+<c: set var = "a" value = "hello" scope = "session" /> -Add the data whose name is a and value is hello in the session.
+
+4.2 remove
+<%pageContext.setAttribute ("a", "pageContext");
+request.setAttribute ("a", "session");
+session.setAttribute ("a", "session");
+application.setAttribute ("a", "application");%>
+<c: remove var = "a" />
+<c: out value = "$ {a}" default = "none" /> -Delete all domain name for a data
+<c: remove var = "a" scope = "page" /> -Delete pageContext name data for a
+
+4.3 url
+The url tag adds sessionId when URL rewriting is needed.
+<c: url value = "/" /> -Output Context Path: / day08_01 /
+<c: url value = "/" var = "a" scope = "request" /> -Assigns the output of this output to variable a. Range is request
+<c: url value = "/ AServlet" /> -Output: / day08_01 / AServlet
+<c: url value = "/ AServlet">
+<c: param name = "username" value = "abc" />
+<c: param name = "password" value = "123" />
+</ c: url> -Output: / day08_01 / AServlet? username = abc & password = 123
+If the parameter contains Chinese, then automatically use the URL encoding.
+
+4.4 if
+The test attribute of the if tag must be a boolean value. If the value of test is true, the content of the if tag is executed. Otherwise, no execution is performed.
+<c: set var = "a" value = "hello" />
+<c: if test = "$ {not empty a}">
+     <c: out value = "$ {a}" />
+</ c: if>
+
+4.5 choose
+The choose tag corresponds to the if / else if / else structure in Java. When the tag's test is true, the contents of this when are executed. The content of the otherwise tag is executed when all when tags have the false test.
+<c: set var = "score" value = "$ {param.score}" />
+<c: choose>
+       <c: when test = "$ {score> 100 || score <0}"> Wrong Score: $ {score} </ c: when>
+       <c: when test = "$ {score> = 90}"> Level A </ c: when>
+       <c: when test = "$ {score> = 80}"> Level B </ c: when>
+       <c: when test = "$ {score> = 70}"> C-level </ c: when>
+       <c: when test = "$ {score> = 60}"> Level D </ c: when>
+       <c: otherwise> Level E </ c: otherwise>
+</ c: choose>
+
+====================================================================================================================================================================================================================================
+
+1 Custom label overview
+
+1.1 custom labeling steps
+In fact, we use the tag in the JSP page is equivalent to call a certain method of an object, for example: <c: if test = "">, This is the same method in the call object. In fact, custom labels is the same as a custom class!
+    Define label processing class: Must be Tag or SimpleTag implementation class;
+    Write tag library descriptor files (TLDs);
+
+The SimpleTag interface is a newly introduced interface in JSP 2.0 that simplifies custom labeling, so for now we basically all use SimpleTags.
+Tag is an old, traditional custom label used in the interface, it is not recommended to use it now.
+
+1.2 Introduction to SimpleTag Interface
+SimpleTag interface reads as follows:
+   void doTag (): tag execution method;
+   JspTag getParent (): get the parent tag;
+   void setParent (JspTag parent): set the parent tag
+   void setJspContext (JspContext context): Set PageContext
+   void setJspBody (JspFragment jspBody): set the label body object;
+
+Remember, all things are objects! Tags in the JSP page is also an object! You can see through the JSP "real" clearly know that all labels will become object method call. Corresponding to the class label We call it "tag processing class".
+
+The life cycle of the tag:
+1. When the container (Tomcat) first execution to a label, it will create an instance of the label processing class;
+2. Then call the setJspContext (JspContext) method, passing the pageContext object of the current JSP page to this method;
+3. If the current label has a parent label, then use the parent label tag processing class object call setParent (JspTag) method;
+4. If the label has a label body, then the label body into JspFragment object, and then call setJspBody () method;
+5. Each time the label is executed, the doTag () method is called, which is the label processing method.
+
+1.3 Tag Library Description File (TLD)
+Tag library description file is used to describe the current tag library label! Tag library description file extension tld, you can put it under the WEB-INF, so that will not be directly accessed by the client.
+
+1.4 use of labels
+There are two steps to using tags in the page:
+    use taglib to import tag libraries
+    use labels
+
+2 custom labels advanced
+2.1 Inherits SimpleTagSupport
+Inheriting SimpleTagSuppport is much easier than implementing the SimpleTag interface, and now you only have to override the doTag () method, and the other methods are already done with SimpleTagSuppport.
+
+2.2 label body label
+Let's take a look at the optional values for the body of the tag:
+The optional values for the <body-content> element are:
+    empty: no label.
+    JSP: traditional tags support it, SimpleTag no longer supports the use of <body-content> JSP </ body-content>. The contents of the tag body can be anything: EL, JSTL, <% =%>, <%%>, and html;
+    scriptless: The body of the tag can not be a Java script, but it can be EL, JSTL, etc. In SimpleTag, if you need a tag body, then use this option;
+    tagdependent: tag body content is not calculated by the tag processing class to handle their own, regardless of the body content is EL, JSP, JSTL, will not do the operation. Almost no one will use this option!
+
+Custom labels with labels need:
+    get the label body object: JspFragment jspBody = getJspBody () ;;
+    output the content of the label body to the page: jspBody.invoke (null);
+    tld specified tag content type: scriptless.
+
+2.3 Do not execute the contents of the page under the label
+If you want to execute a custom label, no longer perform the following things in the JSP page, then you need to use the doTag () method SkipPageException.
+
+2.4 tags with attributes
+General tags will have attributes, such as <c: if test = "">, where test is a boolean attribute. Complete the label with the attributes needed:
+    JavaBean properties are given in the handler class (get / set methods are provided);
+    Related attributes in the TLD.
