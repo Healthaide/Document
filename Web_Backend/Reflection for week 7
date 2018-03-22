@@ -1,0 +1,71 @@
+JSP page
+    Regist.jsp
+    Registration form: user enters registration information;
+    Echo error message: When the registration fails, an error message is displayed.
+    Login.jsp
+    Login form: the user enters login information;
+    Echoing the wrong convenience store: When the login fails, an error message is displayed;
+    Index.jsp
+    The user is logged in: shows the current user name and the "exit" link;
+    The user is not logged in: "You have not logged in" is displayed;
+
+Entity class
+User:
+    String username;
+    String password;
+
+Servlet
+    VerifyCodeServlet
+    Generate verification code;
+    Save the verification code text in the session;
+    Output the picture to the page
+    RegistServlet
+    Get user name, password, encapsulated into the User object;
+    Get the verification code, get the confirmation password;
+    The verification user name, password, and verification code cannot be null, the verification fails, the error information is saved in the request, and the error message is forwarded back to regist.jsp;
+    Compare whether the two input errors are the same. If they are inconsistent, save the error message to the request and forward it back to regist.jsp to display the error message.
+    Obtain the verification code in the session, and compare it with the verification code entered in the form. If it is inconsistent, save the error message to the request and forward it back to regist.jsp to display the error message.
+    Use UserService's regist () method to complete the registration, if the registration fails, save the error message to the request, forwarded back to regist.jsp shows an error message, if the registration is successful, forward to the login.jsp page, indicating that the registration is successful;
+    LoginServlet
+    Get username, password, verification code;
+    Verify that the user name, password, and verification code are empty, verify the failure, save the error message to the request, and forward the error message back to login.jsp;
+    Obtain the verification code in the session, and compare it with the verification code in the form. If it is different, save the error message to the request and forward it back to login.jsp to display the error message.
+    Delete the verification code in the session;
+    Login through UserService's login() method. If an exception is thrown, exception information is obtained, stored in the request, and forwarded to login.jsp to display an error message.
+    Save the current user object to the session;
+    Forward to index.jsp page, indicating successful login!
+    QuitServlet
+    Get session, destroy it;
+    Redirect to index.jsp;
+
+Service
+UserException: The exception class used for UserService;
+UserService:
+    void regist(User user):
+    Use UserDao's findByUsername() method to query the user named user.getUserName(). If the user exists, the user name has already been registered and an exception is thrown.
+    Use UserDao's add(User) method to save user information;
+    User login(String username, String password):
+    Use UserDao's findByUsername() method to query for a user named user.getUsername(). If the user does not exist, the user name is incorrect and an exception is thrown.
+    If you query the User, then compare the parameter password and user.getPassword () is equal, if not, indicating that the password is wrong, throw an exception;
+    If they are consistent, the login is successful and the User object is returned.
+
+DAO
+UserDao:
+    void add(User):
+    Create a SAXReader object, get a Document object, and then get the root element;
+    Add child elements to the root element;
+    Set the username attribute to the child element with the value user.getUsername();
+    Set the password attribute to the child element with the value user.getPassword();
+    Create OutputFormat object, specify indentation as "\t", specify add line breaks;
+    Set OutputFormat to empty the original blank;
+    Create an XMLWriter object using FileWrtier and OutputFormat;
+    Use the write() of the XMLWriter object to save the Document;
+    Close the XMLWriter object;
+    User findByUsername(String username):
+    Create a SAXReader object and get a Document object
+    Use Xpath(//user[username=’xxx’]) to query elements;
+    If the element is not queried, return null;
+    If the element is queried, create a User object;
+    Assign the username attribute of the element to the username attribute of User;
+    Assign the element's password attribute to the User's password attribute;
+    Return user object
