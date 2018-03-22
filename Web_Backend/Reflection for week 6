@@ -1,0 +1,78 @@
+JavaBean
+
+The javaBean specification:
+  There must be a default constructor
+  2 provide get / set method, if only get method, then this property is read-only property!
+  3. Attributes: There are members of the get/set method. There can be no members, only the get/set method. The property name is determined by the get/set method! Not member names!
+  4. The method name meets certain specifications, then it is a property! Boolean type of property, its read method can be the beginning of is, can also be the beginning of get!
+
+
+introspection:
+  Introspection class --> Bean information --> Property descriptor --> Property get/set corresponding Method! --- > Can reflect!
+
+-----------------------
+
+Commons-beanutils, which is dependent on introspection to complete!
+  * Guide package:
+    > commons-beanutils.jar
+    > commons-logging.jar
+
+BeanUtils.getProperty(Object bean, String propertyName)
+BeanUtils.setProperty(Object bean, String propertyName, String propertyValue)
+BeanUtils.populate(Map map, Object bean)
+
+CommontUtils.toBean(Map map, Class class)
+
+-----------------------
+
+Jsp and javaBean related tags!
+
+* <jsp:useBean> --> Creating or Querying Beans
+  * <jsp:useBean id="user1" class="cn.itcast.domain.User" scope="session"/> Find the bean named user1 in the session domain. If it does not exist, create it.
+  * <jsp:useBean id="user1" class="cn.itcast.domain.User" scope="session"/>
+* <jsp:setProperty>
+  * <jsp:setProperty property="username" name="user1" value="admin"/> Sets the javabean username attribute value named user1 to admin
+* <jsp:getProperty>
+  * <jsp:getProperty property="username" name="user1"/> Get a JavaBean named user1 named username attribute value
+
+=========================================
+
+EL expression
+
+1. EL is a JSP built-in expression language!
+  * jsp2.0 started, not to use java script, but use el expressions and dynamic tags instead of javascript!
+  * EL instead of <% = ... %>, that is, EL can only do output!
+
+2. EL expression to read the four major domains
+  * ${xxx}, the global search for a property named xxx, if it does not exist, an empty string is output instead of null.
+  * ${pageScope.xxx}, ${requestScope.xxx}, ${sessionScope.xxx}, ${applicationScope.xxx}, specify the domain to get attributes!
+
+3. javaBean navigation
+  <%
+Address address = new Address();
+address.setCity("Beijing");
+address.setStreet("West Three Flags");
+The
+Employee emp = new Employee();
+emp.setName("Li Xiaosi");
+emp.setSalary(123456);
+emp.setAddress(address);
+The
+request.setAttribute("emp", emp);
+  %>
+
+<h3>Get the emp of the request field using el</h3>
+${requestScope.emp.address.street }<!-- request.getAttribute("emp").getAddress().getStreet() --><br/>
+
+
+4. Everything EL can output is in 11 built-in objects! 11 built-in objects, 10 of which are Maps! The pageContext is not a map, it is a PageContext type, a 9 items.
+  * We have learned four
+  * param: The corresponding parameter, which is a Map, where the key parameter name, value is the parameter value, applies to single-valued parameters.
+  * paramValues: corresponding parameters, it is a Map, where the key parameter name, value is a number of parameter values, suitable for multi-valued parameters.
+  * header: Corresponding to the request header, it is a Map, where the key represents the header name, value is a single header value, applies to a single request header
+  * headerValues: corresponding to the request header, which is a Map, where the key represents the header name, value is a plurality of header values, applicable to multiple-value request header
+  * initParam: Get the parameters in <context-param>!
+  * Cookie: Map<String, Cookie> type, where key is the name of the cookie and value is the cookie object. ${cookie.username.value}
+  * pageContext: It's a PageContext type! ${pageContext.request.contextPath}
+  
+Up to now, all functions almost have been finished, and this is stage progress.
