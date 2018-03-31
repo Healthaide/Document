@@ -1,0 +1,169 @@
+1 SQL Overview
+1.1 What is SQL
+SQL (Structured Query Language) is a "structured query language", which is an operating language for relational databases. It can be applied to all relational databases such as: MySQL, Oracle, SQL Server, etc. The SQ standard (ANSI/ISO) includes:
+ SQL-92: SQL language standard released in 1992;
+ SQL: 1999: SQL language tags released in 1999;
+ SQL:2003: SQL language tags released in 2003;
+
+These standards are just like the JDK version, and there are always some grammatical changes in the new version. Databases of different periods have implemented different standards.
+Although SQL can be used in all relational databases, many databases also have some grammars after the standard, which we can call "dialects." For example, the LIMIT statement in MySQL is a MySQL-specific dialect, which is not supported by other databases! Of course, Oracle or SQL Server has its own dialect.
+
+1.2 Grammar requirements
+ SQL statements can be written in single or multiple lines, ending in a semicolon;
+ You can use spaces and indentation to enhance the readability of the statement;
+ The keywords are case-insensitive and uppercase is recommended.
+
+2 categories
+ DDL (Data Definition Language): data definition language used to define database objects: libraries, tables, columns, etc.
+DML (Data Manipulation Language): Data manipulation language used to define database records (data);
+ DCL (Data Control Language): Data control language used to define access rights and security levels;
+DQL (Data Query Language): Data query language used to query records (data).
+
+3 DDL
+3.1 Basic operations
+ View all database names: SHOW DATABASES;
+ Switch database: USE mydb1, switch to mydb1 database;
+3.2 Operational Database
+ Create database: CREATE DATABASE [IF NOT EXISTS] mydb1;
+Create a database, for example: CREATE DATABASE mydb1, create a database named mydb1. If this data already exists, an error will be reported. For example CREATE DATABASE IF NOT EXISTS mydb1, create the library when the database named mydb1 does not exist, so as to avoid error.
+
+ Delete the database: DROP DATABASE [IF EXISTS] mydb1;
+Delete the database, for example: DROP DATABASE mydb1, delete the database named mydb1. If this database does not exist, an error will be reported. DROP DATABASE IF EXISTS mydb1, even if mydb1 does not exist, it will not report an error.
+
+ modify the database encoding: ALTER DATABASE mydb1 CHARACTER SET utf8
+Modify the encoding of the database mydb1 to utf8. Note that all UTF-8 encodings in MySQL cannot use the middle "-", ie UTF-8 is written as UTF8.
+
+3.3 Data Types
+MySQL, like Java, also has data types. The data types used in MySQL are mainly applied to columns.
+
+Common types:
+ int: integer
+ double: floating-point type, such as double (5,2) that up to 5, which must have 2 decimal places, the maximum value of 999.99;
+• decimal: Generic, use this type in the form of money, because there will be no lack of precision;
+ char: fixed-length string type;
+Varchar: variable length string type;
+ text: string type;
+ blob: byte type;
+ date: Date type. The format is yyyy-MM-dd.
+ time: Time type, in the format hh:mm:ss
+ timestamp: timestamp type;
+
+3.4 Operation Table
+ Create a table:
+CREATE TABLE table name (
+  Column type Column type,
+  Column type Column type,
+  ......
+);
+E.g:
+CREATE TABLE stu(
+Sid CHAR(6),
+Sname VARCHAR(20),
+Age INT,
+Gender VARCHAR(10)
+);
+
+Again for example:
+CREATE TABLE emp(
+Eid CHAR(6),
+Ename VARCHAR(50),
+Age INT,
+Gender VARCHAR(6),
+Birthday DATE,
+Hiredate DATE,
+Salary DECIMAL(7,2),
+Resume VARCHAR(1000)
+);
+
+ View all table names in the current database: SHOW TABLES;
+ View the creation statement of the specified table: SHOW CREATE TABLE emp, view the creation statement of the emp table;
+ View the table structure: DESC emp, view the emp table structure;
+ Delete the table: DROP TABLE emp, delete the emp table;
+ Modify the table:
+1. Modify the added column: add the classname column to the stu table:
+ALTER TABLE stu ADD (classname varchar(100));
+2. Modify the modified column type: Modify the stu table's gender column type to CHAR(2):
+ALTER TABLE stu MODIFY gender CHAR(2);
+3. Modify the modified column name: modify the stu table gender column named sex:
+ALTER TABLE stu change gender sex CHAR(2);
+4. Modify the deleted column: delete the classname column of the stu table:
+ALTER TABLE stu DROP classname;
+5. Modify the modified table name: modify the stu table name to student:
+ALTER TABLE stu RENAME TO student;
+
+4 DML
+4.1 Insert data
+grammar:
+INSERT INTO table name (column name 1, column name 2, ...) VALUES (value 1, value 2)
+INSERT INTO stu(sid, sname,age,gender) VALUES('s_1001', 'zhangSan', 23, 'male');
+INSERT INTO stu(sid, sname) VALUES('s_1001', 'zhangSan');
+
+
+grammar:
+INSERT INTO table name VALUES (value 1, value 2, ...)
+Because you did not specify a column to insert, it means inserting the values ​​of all the columns in the order they were created:
+INSERT INTO stu VALUES('s_1002', 'liSi', 32, 'female');
+
+Note: All string data must use single quotes!
+
+4.2 Modifying Data
+grammar:
+UPDATE table name SET column name 1=value 1, ... column name n=value n [WHERE condition]
+UPDATE stu SET sname=’zhangSanSan’, age=’32’, gender=’female’ WHERE sid=’s_1001’;
+UPDATE stu SET sname=’liSi’, age=’20’ WHERE age>50 AND gender=’male’;
+UPDATE stu SET sname=’wangWu’, age=’30’ WHERE age>60 OR gender=’female’;
+UPDATE stu SET gender=’female’ WHERE gender IS NULL
+UPDATE stu SET age=age+1 WHERE sname=’zhaoLiu’;
+
+4.3 Delete data
+grammar:
+DELETE FROM table name [WHERE condition]
+DELETE FROM stu WHERE sid=’s_1001’003B
+DELETE FROM stu WHERE sname=’chenQi’ OR age > 30;
+DELETE FROM stu;
+
+
+grammar:
+TRUNCATE TABLE table name
+TRUNCATE TABLE stu;
+
+
+Although both TRUNCATE and DELETE can delete all the records of the table, there are different principles. The efficiency of DELETE is not TRUNCATE high!
+TRUNCATE is actually a property DDL statement because it is preceded by DROP TABLE and then CREATE TABLE. And TRUNCATE deleted records can not be rolled back, but DELETE deleted records can be rolled back (rollback is the knowledge of the transaction!).
+
+5 DCL
+5.1 Creating Users
+grammar:
+CREATE USER username@address IDENTIFIED BY 'password';
+CREATE USER user1@localhost IDENTIFIED BY ‘123’;
+
+CREATE USER user2@’%’ IDENTIFIED BY ‘123’;
+
+5.2 Authorizing Users
+Syntax:
+GRANT permissions 1, ..., permissions n ON database.* TO username
+GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT ON mydb1.* TO user1@localhost;
+GRANT ALL ON mydb1.* TO user2@localhost;
+
+5.3 Revocation of authorization
+Syntax:
+REVOKE permissions 1, ..., permissions n ON database.* FORM username
+REVOKE CREATE,ALTER,DROP ON mydb1.* FROM user1@localhost;
+
+5.4 Viewing User Rights
+grammar:
+SHOW GRANTS FOR username
+SHOW GRANTS FOR user1@localhost;
+
+5.5 Delete User
+grammar:
+DROP USER username
+DROP USER user1@localhost;
+
+5.6 Changing User Passwords
+grammar:
+USE mysql;
+UPDATE USER SET PASSWORD=PASSWORD WHERE User=’username' and Host='IP';
+FLUSH PRIVILEGES;
+UPDATE USER SET PASSWORD=PASSWORD('1234') WHERE User='user2' and Host=’localhost’;
+FLUSH PRIVILEGES;
