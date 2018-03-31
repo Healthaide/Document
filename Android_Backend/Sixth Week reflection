@@ -1,0 +1,183 @@
+Affairs in DAO
+Dealing with transactions in DAO is really a piece of cake.
+Public void xxx() {
+   Connection con = null;
+   Try {
+      Con = JdbcUtils.getConnection();
+      con.setAutoCommitted(false);
+      QueryRunner qr = new QueryRunner();
+      String sql = ...;
+      Object[] params = ...;
+      Qr.update(con, sql, params);
+      
+Sql = ...;
+      Object[] params = ...;
+      Qr.update(con, sql, params);
+      Con.commit();
+} catch(Exception e) {
+    Try {
+       If(con != null) {con.rollback();}
+} catch(Exception e) {}
+} finally {
+    Try {
+       Con.close();
+} catch(Exception e) {}
+}
+}
+
+2 Service is the place to do business
+We have to make it clear that DAO is not a place to handle transactions, because each method in DAO is an operation on the database, and the method in Service corresponds to a business logic. That is to say, we need to call multiple methods of DAO in a method in Service, and these methods should be together in a transaction.
+How can I make multiple methods of DAO use the same Connection? The method can no longer obtain Connection by itself, but is passed in by the outside world.
+Public void daoMethod1(Connection con, ...) {
+}
+Public void daoMethod2(Connection con, ...) {
+}
+
+When you call multiple methods of a DAO in Service, you can pass the same Connection.
+Public class XXXService() {
+   Private XXXDao dao = new XXXDao();
+   Public void serviceMethod() {
+      Connection con = null;
+      Try {
+         Con = JdbcUtils.getConnection();
+         con.setAutoCommitted(false);
+         dao.daoMethod1(con, ...);
+         dao.doaMethod2(con, ...);
+         Com.commint();
+} catch(Exception e) {
+   Try {
+      Con.rollback();
+} catch(Exception e) {}
+} finally {
+   Try {
+     Con.close();
+   } catch(Exception e) {}
+}
+}
+}
+
+However, Connection should not appear in the Service, it should only appear in the DAO, because it is JDBC, JDBC is used to connect to the database, the connection database is DAO thing! ! ! However, transactions are things of Service and cannot be put into DAO! ! !
+
+3 Modify JdbcUtils
+We put the opening and closing of the transaction into JdbcUtils, calling the method of JdbcUtils in the service to complete the processing of the transaction, but in the Service will no longer appear Connection "taboo".
+The methods in DAO do not require the Service to pass Connection. DAO will take the Connection object from JdbcUtils. This way, JdbcUtils becomes an intermediary between DAO and Service!
+We added beginTransaction() and rollbackTransaction(), and the commitTransaction() method in JdbcUtils. This code in Service is as follows:
+Public class XXXService() {
+   Private XXXDao dao = new XXXDao();
+   Public void serviceMethod() {
+   Try {
+      JdbcUtils.beginTransaction();
+      dao.daoMethod1(...);
+      dao.daoMethod2(...);
+      JdbcUtils.commitTransaction();
+} catch(Exception e) {
+   JdbcUtils.rollbackTransaction();
+}
+}
+}
+
+DAO
+Public void daoMethod1(...) {
+  Connection con = JdbcUtils.getConnection();
+}
+Public void daoMethod2(...) {
+  Connection con = JdbcUtils.getConnection();
+}
+
+When calling the JdbcUtils.beginTransaction() method in Service, JdbcUtils needs to be ready for a Connection object that has called the setAuthCommitted(false) method, because after calling JdbcUtils.beginTransaction() in Service, the DAO method will be called immediately. , and the JdbcUtils.getConnection() method is called in the DAO method. This shows that JdbcUtils wants to return the just-prepared Connection object in the getConnection() method.
+
+ 
+Create a Connection con attribute in JdbcUtils. When it is null, there is no transaction! When it is not null, it indicates that the transaction was started.
+ When the transaction is not open, you can call the "open transaction" method;
+ After opening the transaction, you can call the "submit transaction" and "rollback transaction" methods;
+The getConnection() method returns con when con isn't null, and returns the connection from the connection pool when con is null.
+
+beginTransaction()
+To determine if the con is null, throw an exception if it is not null!
+If con is null, get a Connection object from the connection pool and assign it to con! Then set it to "submit manually."
+
+getConnection()
+Determine if the con is null, if null indicates no transaction, then get a connection from the connection pool to return;
+If it is not null, it means that the transaction has been started, then return the con attribute. This means that when con isn't null, no matter how many getConnection() methods are called, the same Connection object is returned.
+
+commitTransaction()
+Determine if the con is null. If it is null, the transaction is committed without opening the transaction, then an exception is thrown.
+If con is not null, then call con's commit() method to commit the transaction;
+Call the con.close() method to close the connection;
+Con = null, which means that the transaction has ended!
+
+rollbackTransaction()
+Determine if the con is null. If it is null, the transaction is rolled back without opening the transaction, then an exception is thrown.
+If con is not null, call con's rollback() method to roll back the transaction;
+Call the con.close() method to close the connection;
+Con = null, which means that the transaction has ended!
+
+JdbcUtils.java
+Public class JdbcUtils {
+Private static DataSource dataSource = new ComboPooledDataSource();
+Private static Connection con = null;
+
+Public static DataSource getDataSource() {
+Return dataSource;
+}
+
+Public static Connection getConnection() throws SQLException {
+If(con == null) {
+Return dataSource.getConnection();
+}
+Return con;
+}
+The
+Public static void beginTranscation() throws SQLException {
+If(con != null) {
+Throw new SQLException("Transaction is already open, the transaction cannot be opened again without ending the current transaction!");
+}
+Con = dataSource.getConnection();
+con.setAutoCommit(false);
+}
+The
+Public static void commitTransaction() throws SQLException {
+If(con == null) {
+Throw new SQLException("No transaction currently exists, so no transaction can be committed!");
+}
+Con.commit();
+Con.close();
+Con = null;
+}
+The
+Public static void rollbackTransaction() throws SQLException {
+If(con == null) {
+Throw new SQLException("There is currently no transaction, so it cannot be rolled back!");
+}
+Con.rollback();
+Con.close();
+Con = null;
+}
+}
+
+4 Modify JdbcUtils again
+Now there is a problem with JdbcUtils if there are two threads! The first thread calls the beginTransaction() method. When another thread calls the beginTransaction() method again, because con is no longer null, an exception is thrown.
+We hope JdbcUtils can be used in a multi-threaded environment! This shows that the best way is to provide a Connection for each thread, so that each thread can open their own transactions.
+Remember the ThreadLocal class?
+Public class JdbcUtils {
+Private static DataSource dataSource = new ComboPooledDataSource();
+Private static ThreadLocal<Connection> tl = new ThreadLocal<Connection>();
+
+Public static DataSource getDataSource() {
+Return dataSource;
+}
+
+Public static Connection getConnection() throws SQLException {
+Connection con = tl.get();
+If(con == null) {
+Return dataSource.getConnection();
+}
+Return con;
+}
+The
+Public static void beginTranscation() throws SQLException {
+Connection con = tl.get();
+If(con != null) {
+Throw new SQLException("Transaction is already open, the transaction cannot be opened again without ending the current transaction!");
+}
+Con = dataSource.getConnection();
