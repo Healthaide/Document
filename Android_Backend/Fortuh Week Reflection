@@ -1,0 +1,66 @@
+ 
+Response
+
+1 response overview
+Response is a parameter of the Servlet.service method and its type is javax.servlet.http.HttpServletResponse. When the client makes each request, the server creates a response object and passes it to the Servlet.service() method. The response object is used to respond to the client, which shows that using the response object in the service () method can complete the response to the client.
+The function of the response object is divided into the following four types:
+ Set response header information;
+ send status code;
+ set the response text;
+ Redirection;
+
+2 response response text
+Response is a response object. To output a response body (response body) to the client, you can use the response flow of the response. The repsonse provides a total of two response flow objects:
+PrintWriter out = response.getWriter(): Get the character stream;
+ServletOutputStream out = response.getOutputStream(): Get the byte stream;
+
+Of course, if the response body content is a character, use response.getWriter(), and if the response content is a byte, for example when downloading, then use response.getOutputStream().
+Note that in one request, you cannot use both streams at the same time! That is, either you use repsonse.getWriter() or response.getOutputStream(), but you cannot use both streams at the same time. Otherwise it will throw an IllegalStateException.
+
+2.1 character response flow
+ Character encoding
+When using response.getWriter(), note that the default character encoding is ISO-8859-1. If you want to set the character encoding of the character stream to utf-8, you can set it using response.setCharaceterEncoding("utf-8"). This ensures that the characters output to the client are all encoded using UTF-8!
+But the client browser does not know what the response data is encoded! If you want to inform the client to use UTF-8 to interpret the response data, then it is better to use the response.setContentType("text/html;charset=utf-8") method, because this method will not only call response.setCharaceterEncoding("utf- 8"), but also set the content-type response header, the client browser will use the content-type header to decode the response data.
+
+ buffer
+response.getWriter() is a PrintWriter type, so it has a buffer and the default size of the buffer is 8KB. In other words, before the response data does not output 8KB, the data is stored in the buffer and will not be sent to the client immediately. When the servlet is executed, the server will only refresh the stream and send the data in the buffer to the client.
+If you want the response data to be sent to the client immediately:
+Write more than 8KB of data into the stream;
+Call the response.flushBuffer() method to manually flush the buffer;
+
+3 Set response headers
+You can use the setHeader() method of the response object to set the response header! The response header set using this method will eventually be sent to the client browser!
+response.setHeader("content-type", "text/html;charset=utf-8"): Sets the content-type response header. The role of this header is to tell the browser that the response content is of type html and the encoding is utf-8. . And at the same time set the character stream of the response coded as utf-8, that is, response.setCharaceterEncoding ("utf-8");
+ response.setHeader("Refresh","5; URL=http://www.itcast.cn"): After 5 seconds, it will automatically jump to the homepage of ZhiZhi.
+
+4 Set the status code and other methods
+Response.setContentType("text/html;charset=utf-8"): Equivalent to calling response.setHeader("content-type", "text/html;charset=utf-8");
+Response.setCharacterEncoding("utf-8"): Set the character encoding of the character response stream to utf-8;
+response.setStatus(200): set the status code;
+response.sendError(404, "The resource you are looking for does not exist"): When sending an error status code, Tomcat will jump to a fixed error page, but an error message can be displayed.
+Request
+
+1 request overview
+Request is a parameter of the Servlet.service() method, of type javax.servlet.http.HttpServletRequest. When the client sends out each request, the server creates a request object, encapsulates the request data in the request, and then passes it to the service() method when the Servlet.service() method is called. This shows that the request is in the service() method. The request data can be obtained through the request object.
+ 
+The function of request can be divided into the following types:
+ encapsulate the request header data;
+ encapsulate the request body data, if it is a GET request, then there is no text;
+ request is a domain object, you can add it as a Map to get data;
+ request provides the function of request forwarding and request inclusion.
+
+2 request domain method
+Request is a domain object! There are a total of four domain objects in the Java Web. The ServletContext is a domain object. It creates only one ServletContext object in the entire application. Request one, request can share data in a request.
+A request will create a request object. If multiple Servlets are experienced in a request, multiple Servlets can use the request to share data. Now that we don't know how to go through a servlet in a request, we'll know after learning the request forwarding and request inclusion.
+The following is the domain method of the request:
+ 
+Void setAttribute (String name, Object value): used to store an object, can also be called to store a domain attribute, such as: servletContext.setAttribute ("xxx", "XXX"), in the request to save a domain attribute , The domain attribute name is xxx, and the domain attribute value is XXX. Note that if you call this method multiple times and use the same name, it will overwrite the previous value. This feature is the same as the Map.
+ Object getAttribute(String name): used to obtain the data in the request. It is necessary to store the data before it is acquired. For example: String value = (String) request.getAttribute(“xxx”);, get the name xxx Domain attribute
+Void removeAttribute(String name): used to remove the domain attribute from the request. If the domain attribute specified by the parameter name does not exist, then this method does nothing.
+Enumeration getAttributeNames(): Get the names of all domain attributes;
+
+3 request to obtain the request header data
+Request and header related methods are:
+String String getHeader(String name): Gets the request header of the specified name;
+Enumeration getHeaderNames(): Get all request header names;
+Int getIntHeader(String name): Gets the request header of type int.
