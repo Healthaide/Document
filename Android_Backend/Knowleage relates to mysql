@@ -1,0 +1,182 @@
+Multi-table query
+Multi-table queries are as follows:
+ Merge result sets;
+ Connection query
+内 Internal connection
+外 Outer connection
+左 Left outer connection
+右 Right outer join
+ Full outer join (MySQL does not support)
+自然 Natural connection
+ Subquery
+
+1 Merge result sets
+1. Role: Merge result sets is to merge the query results of two select statements together!
+There are two ways to combine result sets:
+ UNION: remove duplicate records, for example: SELECT * FROM t1 UNION SELECT * FROM t2;
+ UNION ALL: Do not remove duplicate records, for example: SELECT * FROM t1 UNION ALL SELECT * FROM t2.
+ 
+ 
+3. Requirement: Two results to be merged: The number of columns and column types must be the same.
+2 connection query
+Join the query is to find the product of multiple tables, such as t1 connection t2, then the result of the query is t1 * t2.
+ 
+
+Joining the query produces a Cartesian product. Assume that the set A={a,b} and the set B={0,1,2}, the Cartesian product of the two sets is {(a,0),(a,1) ,(a,2),(b,0),(b,1),(b,2)}. Can be extended to multiple collections.
+It is not what we want so many table queries to produce such results, so how to remove duplicate, unwanted records, of course, is through conditional filtering. Usually there is an association between multiple tables to be queried. Then the Cartesian product is removed through the association.
+Can you imagine connecting the results of the query to the emp and dept tables? A total of 14 rows of emp records, dept table a total of 4 rows of records, then the query results after the connection is 56 rows of records.
+In other words, you just want to query the emp table and display the information of each employee's department. Then you need to use the main foreign key to remove unnecessary information.
+ 
+
+Using primary foreign key relationships as a condition to remove useless information
+SELECT * FROM emp,dept WHERE emp.deptno=dept.deptno;
+
+
+ 
+
+The above query results will query all the columns of the two tables, maybe you do not need so many columns, then you can specify the columns to be queried.
+SELECT emp.ename,emp.sal,emp.comm,dept.dname
+FROM emp,dept
+WHERE emp.deptno=dept.deptno;
+
+ 
+
+You can also specify an alias for the table and then use the alias when referring to the column.
+SELECT e.ename,e.sal,e.comm,d.dname
+FROM emp AS e,dept AS d
+WHERE e.deptno=d.deptno;
+
+
+2.1 Internal connection
+The above connection statement is an internal connection, but it is not a query method in the SQL standard, it can be understood as a dialect! The SQL standard internal connection is:
+SELECT *
+FROM emp e
+INNER JOIN dept d
+ON e.deptno=d.deptno;
+
+
+Inner connection features: The query results must satisfy the conditions. For example, we insert a record into the emp table:
+ 
+The deptno is 50, but in the dept table there are only 10, 20, 30, and 40 departments. Then the record “Zhang San” does not appear in the above query result because it cannot satisfy e.deptno=d.deptno. condition.
+
+2.2 External Connection (Left Connection, Right Connection)
+The characteristics of the outer connection: the results of the query may not meet the conditions.
+Left connection:
+SELECT * FROM emp e
+LEFT OUTER JOIN dept d
+ON e.deptno=d.deptno;
+
+The left join first searches for the left table (ie, the left table is the main table), then the right table is queried, and the right table shows that the conditions are met, and the NULL display is not satisfied.
+You may not understand this way, we still use the above example to illustrate. In the EMP table, the number of the "Zhang San" record is 50, and the dept table does not have a record with department number 50. Therefore, the "Zhang San" record cannot satisfy e.deptno=d.deptno. condition. However, in the left connection, because the emp table is the left table, the records in the left table will be queried out, that is, the record of "Zhang San" will be found, but the corresponding right table part shows NULL.
+ 
+
+2.3 Right connection
+Right join is to query all the records in the right table first, and then the left table meets the conditions of the display, does not meet the display NULL. For example, in the dept table, there are no employees in the 40 departments, but in the right connection, if the dept table is the right table, 40 departments will still be found, but the corresponding employee information is NULL.
+SELECT * FROM emp e
+RIGHT OUTER JOIN dept d
+ON e.deptno=d.deptno;
+
+ 
+
+
+Connection query experience:
+The connection is not limited to two tables, and the connection query can also be three, four, or even N tables. It is not usually necessary to join the query to require the entire Cartesian product, but only part of it. Then you need to use conditions to remove unnecessary records. This condition is mostly removed using the primary foreign key relationship.
+The join query of the two tables must have a primary foreign key relationship, and the join query of the three tables must have two primary foreign key relationships, so when everyone is not very familiar with the join query, the first thing to learn is to remove the useless Cartesian product. This is handled using the primary foreign key relationship as a condition. If there are two table queries, then there is at least one primary foreign key condition, and the three table joins have at least two primary foreign key conditions.
+
+3 natural connection
+As we all know, connecting queries can produce useless Cartesian products. We usually use the primary foreign key relationship equation to remove it. Natural connection does not require you to give the primary foreign key equation, it will automatically find this equation:
+ The two columns in the connected table have the same name and type as the condition. For example, the emp and dept tables all have deptno columns, and the types are the same, so they will be found by the natural connection!
+Of course, there are other ways to find conditions for natural connections, but other methods may have problems!
+SELECT * FROM emp NATURAL JOIN dept;
+SELECT * FROM emp NATURAL LEFT JOIN dept;
+SELECT * FROM emp NATURAL RIGHT JOIN dept;
+
+
+4 subqueries
+A subquery is a nested query, that is, a SELECT contains a SELECT. If there are two or more than two SELECTs in a statement, then the subquery is.
+ Subquery appears:
+After  where, as part of the conditions;
+ from, as a table being queried;
+ When the subquery appears as a condition after the where, you can also use the following keywords:
+ any
+ all
+ The form of the subquery result set:
+ Single row (for conditions)
+ Single row and multiple columns (for conditions)
+ Multiple rows and columns (for conditions)
+ Multiple rows and columns (for tables)
+Exercise:
+1. Employees who earn more than Ganning.
+analysis:
+Queries: Wages > Ganning Salary, in which Ganning Salary requires a subquery.
+
+The first step: Check wages in Ganning
+SELECT sal FROM emp WHERE ename='Gan Ning'
+
+The second step: Inquire about employees who are higher than Ganning salary
+SELECT * FROM emp WHERE sal > (${first step})
+
+result:
+SELECT * FROM emp WHERE sal > (SELECT sal FROM emp WHERE ename='Gan Ning')
+
+ Subquery as a condition
+ Subquery form is single row and single column
+
+2. Salary higher than employee information of 30 department owners
+analysis:
+Queries: The wages are higher than the salaries of all 30 departments, of which the salaries of all 30 departments are subqueries. Above all you need to use the all keyword.
+
+The first step: query the salary of 30 departments
+SELECT sal FROM emp WHERE deptno=30;
+
+Step 2: Inquire employee information higher than the salary of 30 department owners
+SELECT * FROM emp WHERE sal > ALL (${first step})
+
+result:
+SELECT * FROM emp WHERE sal > ALL (SELECT sal FROM emp WHERE deptno=30)
+
+
+ Subquery as a condition
+ The subquery is in multiple rows and single columns (ALL or ANY keyword can be used when the subquery result set is in multiple rows and columns)
+
+3. Query employee information with the same job and salary as Yin Tianzheng
+analysis:
+Queries: Job and salary are exactly the same as those of Yin Tianzheng. This is a subquery.
+
+The first step: Check out Yin Tianzheng’s work and salary
+SELECT job,sal FROM emp WHERE ename= 'Yin Tian Zheng'
+
+Step 2: Check out the person who has the same job and salary as Yin Tianzheng
+SELECT * FROM emp WHERE (job,sal) IN (${first step})
+
+result:
+SELECT * FROM emp WHERE (job,sal) IN (SELECT job,sal FROM emp WHERE ename='YIN TIAN ZHENG')
+
+ Subquery as a condition
+ Subquery is single-row and multi-column
+
+4. Query employee name, employee salary, department name, department address with employee number 1006
+analysis:
+Query column: employee name, employee salary, department name, department address
+Lookup table: emp and dept, the analysis shows that no outer join (external connection characteristics: a row (or some rows) records will appear half value, half NULL value)
+Conditions: Employee number is 1006
+
+The first step: remove multiple tables, only check a table, remove the department table here, only check the employee table
+SELECT ename, sal FROM emp e WHERE empno=1006
+
+Step 2: Make the first step and dept do inner join query, add primary foreign key condition to remove useless Cartesian product
+SELECT e.ename, e.sal, d.dname, d.loc
+FROM emp e, dept d
+WHERE e.deptno=d.deptno AND empno=1006
+
+The dept table in the second step represents a complete table of all columns in all rows. Here you can replace dept with all the rows, but only the table with dname and loc columns. This requires a subquery.
+The third step is to query the dname and loc columns in the dept table. Because deptno is used as a condition to remove unnecessary Cartesian products, it needs to be queried.
+SELECT dname,loc,deptno FROM dept;
+
+Step 4: Replace the dept in the second step
+SELECT e.ename, e.sal, d.dname, d.loc
+FROM emp e, (SELECT dname,loc,deptno FROM dept) d
+WHERE e.deptno=d.deptno AND e.empno=1006
+
+ Subquery as a table
+ The subquery is in multiple rows and columns
