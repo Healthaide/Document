@@ -1,0 +1,160 @@
+Servlet
+
+1. What is a servlet
+  * Servlet is one of the three components of JavaWeb (Servlet, Filter, Listener)
+  * Servlet is a dynamic resource to handle client requests
+  * Servlet's tasks are:
+    > Get request data
+    > Processing requests
+    > Complete response
+  * Servlet interface method:
+    > void init(ServletConfig)
+    > void service(ServletRequest,ServletResponse)
+    > void destory()
+    > ServletConfig getServletConfig()
+    > String getServletInfo()
+
+2. The way to implement Servlet
+  * Implement Servlet interface (inconvenient)
+  * Inheritance GenericServlet class (inconvenient)
+  * Inherited HttpServlet class (convenient)
+
+The first example of Servlet
+  * Write a class cn.itcast.MyServlet, implement Servlet interface
+  Implement the service() method, which gives System.out.println("hello servlet!");
+  * Specify the Servlet access path in the web.xml file: /myservlet
+<servlet>
+  <servlet-name>xxx</servlet-name>
+  <servlet-class>cn.itcast.MyServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>xxx</servlet-name>
+  <url-pattern>/myservlet</url-pattern>
+</servlet-mapping>
+  When the user accesses: http://localhost:8080/day04_1/myservlet in the address bar, System.out.println("hello servlet!") is executed;
+
+===============================
+
+Servlet life cycle
+
+  The Servlet interface has a total of 5 methods, but only three of them are lifecycle methods:
+  * void init(ServletConfig)
+  * void service(ServletRequest,ServletResponse)
+  * void destory()
+
+  1). The server creates a servlet:
+  * When the servlet is requested for the first time, or when the server starts, the server creates a servlet instance.
+  * The server default is to create a Servlet instance when the servlet is requested for the first time. If you want to create a Servlet implementation when the server is started, it needs to be configured in web.xml.
+  * The server creates an instance object for only one type of servlet, so the servlet is a singleton;
+
+  2). Server initialization servlet:
+  * When the server creates a Servlet instance, it will immediately call the Servlet's init (ServletConfig) method to complete the Servlet initialization;
+  * init(ServletConfig) will only be called once
+  * The server will pass ServletConfig parameters when calling init() method
+  
+  3). The server uses a servlet to handle the request:
+  * When the Servlet is requested, the server will call the Servlet's service (ServletRequest, ServletResponse) method
+  The service(ServletRequest,ServletResponse) method is called once per request processing, so it may be called N times
+  * Because Servlets are singletons, it is possible that at the same time a servlet object will be accessed simultaneously by multiple requests, so this may be a threading problem
+  * Servlet is not a threading case, which helps improve efficiency, but it can't let servlets have state to avoid multiple threads contending for data
+
+  4). The server destroys the servlet
+  * The server usually does not destroy the servlet. Usually the servlet is destroyed only when the server is shut down.
+  * The server will call the servlet's destroy() method before destroying the servlet
+  * You can release the resource occupied by the servlet in the destroy() method, but usually the servlet has nothing to release, so the method is generally empty
+
+===============================
+
+ServletConfig
+
+  ServletConfig is the parameter type of the init() method in the servlet. The server passes the ServletConfig object to the init() method when calling the init() method.
+  The ServletConfig object encapsulates the servlet configuration information in web.xml, which corresponds to the <servlet> element. The ServletConfig class features:
+  * String getServletName (): Get Servlet configuration name, the value of <servlet-name>;
+  * ServletContext getServletContext(): Get ServletContext object, this object is introduced later
+  * String getInitParameter(String name): Get initialization parameters
+  * Enumeration getInitParameterNames(): Get the names of all initialization parameters
+
+  In the web.xml file, you can configure 0~N initialization parameters for <servlet> when configuring <servlet>, for example:
+<servlet>
+  <servlet-name>xxx</servlet-name>
+  <servlet-class>cn.itcast.servlet.MyServlet</servlet-class>
+  <init-param>
+    <param-name>p1</param-name>
+    <param-value>v1</param-value>
+  </init-param>
+  <init-param>
+    <param-name>p2</param-name>
+    <param-value>v2</param-value>
+  </init-param>
+</servlet>
+
+===============================
+
+GenericServlet
+
+  GenericServlet is an implementation class of the Servlet interface, but it is an abstract class whose only abstract method is the service() method.
+  GenericServlet implements the servlet method:
+  * Implements the String getServletInfo() method
+  * Implements void destory() method, empty implementation
+  * Implements void init(ServletConfig) method to save ServletConfig parameters
+  * Implements ServletConfig getServletConfig() method
+
+  GenericServlet implements the ServletConfig interface:
+  * Implemented ServletContext getServletContext() method
+  * Implements the String getInitParameter() method
+  * Implements the String getServletName() method
+  * Implements Enumeration getInitParameterNames() method
+
+  GenericServlet adds init() method:
+  * This method will be called by the init(ServletConfig) method
+  * If you want to initialize the servlet, you should override the init() method instead of the init(ServletConfig) method
+
+===============================
+
+HttpServlet
+  
+  HttpServlet is a subclass of GenericServlet that focuses on HTTP requests
+  HttpServlet method:
+  * Implements the void service(ServletRequest,ServletResponse) method. The implementation content is:
+    > Strong ServletRequest to HttpServletRequest
+    > Strong ServletResponse to HttpServletResponse
+    > Call the void service(HttpServletRequest,HttpServletResponse) method added by this class
+  * Added void service(HttpServletRequest,HttpServletResponse) method, the content is:
+    > Call request's getMethod() to get the request method
+    > If the request method is GET, call the doGet(HttpServletRequest,HttpServletResponse) method added by this class
+    > If the request method is POST, call the doPost(HttpServletRequest,HttpServletResponse) method added by this class
+  * Added doGet (HttpServletRequest, HttpServletResponse) method, the content is a response 405, indicating an error, so we should cover this method
+  * Added doPost(HttpServletRequest, HttpServletResponse) method, content is response 405, indicating error, so we apply to cover this method
+
+If you customize the Sevlet by inheriting the HttpServlet class, then:
+  * Do not override void service(ServletRequest,ServletResponse)
+  * Do not override void service(HttpServletRequest, HttpServletResponse)
+  * Instead it should override doGet() or doPost() methods.
+
+===============================
+
+<url-pattern>
+
+  <url-pattern> is a child element of <servlet-mapping> that is used to bind the servlet's access path
+  Multiple <url-pattern>s can be given in a <servlet-mapping>, ie a servlet can have multiple access paths:
+  <servlet-mapping>
+    <servlet-name>xxx</servlet-name>
+    <url-pattern>/helo1<url-pattern>
+    <url-pattern>/hello2<url-pattern>
+  </servlet-mapping>
+
+  You can also use wildcard characters in <url-pattern>, which is "*".
+  * <url-pattern>/*<url-pattern>: Match any path
+  * <url-pattern>/do/*<url-pattern>: indicates that any path starting with /do is matched
+  * <url-pattern>*.do<url-pattern>: Match any path ending with ".do"
+
+  note:
+  * The wildcard character is either at the beginning or at the end and cannot be in the middle. For example: /*.do is the wrong use.
+  * If you do not use wildcards, then <url-pattern> must start with "/", for example: <url-pattern>abc</url-pattern> is wrong
+
+===============================
+===============================
+===============================
+
+ServletContext
+  
