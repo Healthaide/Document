@@ -1,0 +1,199 @@
+The kinds of exploits that botnets may perform include massive spamming,
+Distributed Denial of Service attacks, password cracking, and hiding other illegal
+Attacks. In each of these exploits, hundreds or thousands of computers (or bots) are
+Commanded to attack. Spamming generates the massive iday28
+Today's content
+ Generic
+ Comments
+Servlet3.0
+ Dynamic proxy
+ Class loader
+
+Generic
+1 Review generics
+Generic classes: Classes that have one or more generic variables are called generic classes.
+Public class A<T> {
+    Private T t;
+    Public A(T t) {
+        This.t = t;
+}
+Public T get() {
+    Return t;
+}
+}
+
+
+2 generic methods
+Generic method features:
+ Generic variables are used in the parameters of the method;
+ Generic variables are used in the method's return value.
+
+Public <T> T get(T[] ts) {
+  Return ts[ts.lengt / 2];
+}
+String[] names ={"zhangSan", "liSo", "wangWu"};
+String name = get(names);
+
+When calling a generic method, you do not need to specify a generic variable. The compiler recognizes the type of the generic variable by the type of the actual parameter. The parameter passed in the previous example is a String[] type, which is equivalent to assigning a value to the generic type T to String. .
+
+3 Inheritance (Realization) Generic Classes (Interfaces)
+Inheriting a generic class requires assigning a parent class's generic variable! It's like assigning a generic variable to an object that creates a generic class.
+// Create a generic class object
+List<String> list = new ArrayList<String>();
+// Inherit generics class 1: subclasses are also generics
+Public class MyList1<T> extends ArrayList<T> {
+ ...
+}
+// Inherit generics class 2: Subclasses are not generics
+Public class MyList2 extends ArrayList<String> {
+  ...
+}
+
+4 wildcards
+To illustrate the role of wildcards, let's look at an example:
+List<Object> list1 = new ArrayList<String>();
+List<Object> list2 = new ArrayList<Integer>();
+
+The above call is not compile!
+This shows that if you want to write a list1, you can print the list2 method is impossible!
+
+Public static void fun(List<Object> list) {...}
+List<String> list1 = new ArrayList<String>();
+List<Integer> list2 = new ArrayList<Integer>();
+Fun(list1);//Compile does not pass
+Fun(list2);//Compile does not pass
+
+If you remove the generic parameter of the fun() method, then OK. Ie do not use generics!
+
+Public static void fun(List list) {...}//There will be a warning
+List<String> list1 = new ArrayList<String>();
+List<Integer> list2 = new ArrayList<Integer>();
+Fun(list1);
+Fun(list2);
+
+The above code is not wrong, but there will be a warning. The reason for the warning is that you did not use generics! Java hopes everyone will use generics.
+You might say that TMD cannot use generics at all.
+
+4.1 Wildcard Overview
+Wildcards deal specifically with this issue.
+
+Public static void fun(List<?> list) {...}
+
+The "?" in the above code is a wildcard, it can only be used in "<>". Cause you can't take it out of "<>".
+You can pass arguments of type List<String> and List<Integer> to the fun() method. When passing a parameter of type List<String>, the value assigned to "?" is assigned to String; when the parameter of type List<Integer> is passed to fun() method, the value assigned to "?" is assigned to Integer.
+
+4.2 The disadvantages of wildcards
+Parameters with wildcards cannot use generic-related methods. For example: list.add("hello") does not pass.
+The above problem is handled, but the wildcard also has its disadvantages.
+In the above example, the wildcard in the List<?> list argument can be given any value, but at the same time you do not know what value the wildcard is assigned.
+When you don't know what "?" is, you can't use any generics-related methods. That is, the argument list of the fun() method can no longer use its generic-related methods. For example: list.add("hello") is wrong, because the List class's add() method's argument is of type T. Now that you don't know what type T is, how do you add a String to the list? If the user is passing List(Integer) instead of List<String> when calling the fun() method, you can't add String of course.
+
+Of course, you can also call list's get() method. Even if you don't know what type of "?" is, it is certainly of type Object. So you can: Object o = list.get(0);
+
+4.3 Wildcard Limits
+Wildcard characters can only appear in the referenced definition and cannot appear in the created object. For example: new ArrayList<?>(), this is not possible. ArrayList<?> list = null. This is fine.
+
+4.4 Wildcards with Lower Boundaries
+List<? extends Number> list;
+Where <? extends Number> indicates the lower boundary of the wildcard, ie "?" can only be assigned to Number or its subtype.
+
+Public static void fun(List<? extends Number> list) {...}
+Fun(new ArrayList<Integer>());//ok
+Fun(new ArrayList<Double>());//ok
+Fun(new ArrayList<String>());//not ok
+
+When the argument of the fun() method is List<? extends Number>, it means that you can only assign subtypes of "?" Number or Number.
+Although this is a bit more restrictive, it is also beneficial because you can list the get() method. Even if you don't know what type of "?" is, you know it must be a subtype of Number or Number. So: Number num = list.get(0) is fine.
+However, you still cannot call the list.add() method!
+
+4.5 Wildcards with Lower Boundaries
+List<? super Integer> list;
+Where <? super Integer> represents the lower boundary of the wildcard, ie "?" can only be assigned to Integer or its parent type.
+
+Public static void fun(List<? super Integer> list) {...}
+Fun(new ArrayList<Integer>());//ok
+Fun(new ArrayList<Number>());//ok
+Fun(new ArrayList<Object>());//ok
+Fun(new ArrayList<String>());//not ok
+
+At this point, calling list.get() again can only be done using the Object type: Object o = list.get(0). Because you don't know which "In" is the parent of Integer.
+But you can call the list.add() method, for example: list.add(new Integer(100)) is correct. Because "?" is Integer, Number, Object, list.add(new Integer(100)) is correct.
+
+4.6 wildcard summary
+1. Method parameters with wildcards are more generic;
+2. Objects with wildcard type are limited to the use of generic related methods;
+3. Lower boundary wildcards: You can use methods whose return value is a generic variable;
+4. Upper bound wildcards: You can use methods with generic arguments.
+
+5 Generic parent class gets the type parameter passed by the subclass
+See an example:
+Public class A<T> {
+}
+Pubilc class B extends A<String> {
+}
+Public class C extends A<Integer> {
+}
+
+If you need to get a subclass to assign a value to T in class A, you can use the following method:
+Public class A<T> {
+  Public A() {
+    ParameterizedType pType = (ParameterizedType)this.getClass().getGenericSuperclass();
+Class clazz = (Class)pType.getActualTypeArguments()[0];
+System.out.println(clazz.getName());
+}
+}
+
+annotation
+
+1 Overview of Notes
+Notes do you remember? Just kidding!
+Comments are for people, and comments are for programs!
+The comment is used to replace the configuration file! You recall that we used to always write some configuration files, such as web.xml. Do you remember? Write <servlet> and <servlet-mapping> inside! Who reads the configuration file? Of course it is Tomcat! Who writes the configuration file? Of course, we have to write!
+In Servlet 3.0 you can use annotations instead of configuration files. Instead of writing configuration files, developers write annotations and then Tomcat reads annotations.
+
+Comments are also classes that need to be defined before they can be used!
+There is an annotation class for @WebServlet in Servlet3.0, and then we can use this annotation in Servlet using @WebServlet. This annotation is used instead of <servlet>. Then Tomcat will read the information in the annotation through reflection!
+
+2 Notes in Java
+Notes in Java:
+ @Overrid: Notes on methods. When the method is not overriding the method of the parent class, it will complain;
+ @Deprecated: Act on the method. Mark this method as an obsolete method (obsolete);
+ @SuppressWarnings: Act on methods to suppress warnings.
+
+3 Defining annotation classes
+The definition annotation class cannot use class, enum, or interface, but use @interface.
+Public @interface MyAnn{}
+
+4 Use annotation goals
+Annotations can work on: classes (interfaces or enumerations), properties, methods, constructors, packages, parameters, local variables
+Package cn.itcast.annocation;
+
+@MyAnn
+Public class MyClass {
+@MyAnn
+Private int a;
+@MyAnn
+Public MyClass() {}
+@MyAnn
+Public void fun1() {}
+@MyAnn
+Public void fun2(@MyAnn String s) {
+@MyAnn
+Int n = 10;
+}
+}
+
+5 annotation attributes
+You can also give attributes when defining annotations
+Public @interface MyAnn {
+String value();
+Int value1();
+}
+
+Where value is an attribute! You may say it is a way! Yes, it is a method, but we have to call it an attribute because it is better understood as an attribute.
+When you specify attributes for annotations, you must assign values ​​to the attributes when using annotations:
+@MyAnn(value1=100,value="hello")
+Public class MyClass {
+}
+
+The annotation attribute can also have a default value, which can be given without a default value when using the annotation
