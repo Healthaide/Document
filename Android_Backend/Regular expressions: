@@ -1,0 +1,25 @@
+Regular expressions: ★★★☆ are actually some rules for manipulating strings.
+Benefits: With the advent of regularity, the complex manipulation of strings becomes much simpler.
+Features: The code for string manipulation is represented by some symbols. As long as you use the specified symbol, you can call the underlying code to operate on the string. The emergence of symbols simplifies the writing of the code.
+Disadvantages: The appearance of the symbol simplifies writing, but it reduces reading.
+In fact, more is the use of regular solutions to string operations.
+
+Group: It is marked with parentheses. Each define a parenthesis is a group, and there is an automatic number, starting from 1.
+As long as the group is used, the corresponding number is the content of the group. Don't forget that the array needs to be added.
+(aaa(wwww(ccc))(eee)) Techniques, starting from the left parenthesis. There are several groups of left parentheses.
+
+Common operations:
+1, Match: Its practicality is the matches method in the String class.
+String reg = "[1-9][0-9]{4,14}";
+Boolean b = qq.matches(reg);// Associate regular and string strings to match strings.
+2, cutting: Its practical is the split method in the String class.
+3, Replace: Its practicality is replaceAll () in the String class;
+4, get:
+   1) First compile the regular expression into a regular object. Using the static method compile(regex) in Pattern;
+2) Get the Matcher object through the Pattern object.
+Pattern is used to describe regular expressions, and regular expressions can be parsed.
+The rule operation string needs to be newly encapsulated into the matcher object Matcher.
+Then use the method of the Matcher object to manipulate the string.
+How to get matcher object?
+Pass the matcher method in the Pattern object. This method can be associated with regular rules and strings. And return matcher object.
+3) Use the methods in the Matcher object to perform various regular operations on the string.
