@@ -1,0 +1,125 @@
+There are many competing operating systems available for the development and
+deployment of application software that executes directly on a mobile device.
+The Android platform which was developed by Google, currently holds the great-
+est market share in terms of mobile devices currently in circulation. Android is
+open source and not vendor specific making it a popular choice for many mobile
+hardware companies such as Samsung, HTC, Motorola, LG and others.
+Android instead uses a larger subset of Java SE, including most of the
+classes from the packages java.awt.font, java.beans, java.io, java.nio,
+java.lang, java.math, java.net, javax.net, java.security, javax.crypto,
+javax.security.auth, java.sql, javax.sql, java.text, java.util, javax.-
+xml, org.xml.sax and its subpackages, org.w3c.dom and org.w3c.dom.is,
+along with the optional Java ME API javax.microedition.khronos.egl and
+javax.microedition.khronos.opengles for OpenGL ES. Missing are the Java
+SE API for AWT and Swing, RMI and CORBA, image IO, management, nam-
+ing services, print, sound, transactions, XML API for binding, security, XML
+streams. In their place Google introduced its own API in various android sub-
+packages. Another interesting difference with Java-enabled mobile devices is
+that Android devices use a Dalvik virtual machine instead of a Java virtual
+machine. Once an Android application has been compiled to Java bytecode, a
+dx utility tool converts the Java .class and .jar files to a Dalvik executable
+.dex format file. Hence, in reality Android is not a Java platform so changes
+to Android do not have to pass through the Java Community Process for stan-
+dardization. Android is licensed so that modifications made to it can remain
+closed-source.
+Android applications can be developed using the Android SDK which is
+freely available from http://developer.android.com/ for Linux, Mac OS, and
+Windows, and includes documentation, sample applications, the dx tool and an
+emulator. Also available is the Android Development Tools (ADT) plugin for
+Eclipse, or the more refined Android Studio IDE.
+An Android application consists of Java source code (in the src folder of the
+project), resource files such as images, display view configuration, and localized
+strings (in the res folder), and the AndroidManifest.xml manifest XML doc-ument that
+describes the components of the application and their intent, any
+additional libraries (besides the default android.jar) and security permissions
+that the application requires. The source code also includes the class R.java
+that is automatically generated from the resource files.
+When developing an Android application, typically the developer will cre-
+ate a class which extends the android.app component class Activity. An
+Activity is a single, window with which the user can interact and can hold
+View objects. The Activity class takes care of creating a window in which a
+user interface. This is usually done with the method setContentView(View
+v). While activities are often presented to the user as full-screen windows, they
+can also be used in other ways, such as floating windows or embedded inside of
+another activity.
+Every Activity should be declared in the AndroidManifest.xml manifest
+file with the <activity> tag which is held within the <application> opening
+and closing tags. Each <activity> tag encloses the <intent-filter> tag. This
+results in that Activity being started when the application launches
+Activities in the system are managed as an activity stack. When a new
+activity is started, it is placed on the top of the stack and becomes the running
+activity – the previous activity always remains below it in the stack, and will
+not come to the foreground again until the new activity exits.
+An activity has essentially four states:
+• If an activity in the foreground of the screen (at the top of the stack), it
+is active or running.
+• If an activity has lost focus but is still visible (that is, a new non-full-sized
+or transparent activity has focus on top of your activity), it is paused.
+A paused activity is completely alive (it maintains all state and member
+information and remains attached to the window manager), but can be
+killed by the system in extreme low memory situations.
+• If an activity is completely obscured by another activity, it is stopped.
+It still retains all state and member information, however, it is no longer
+visible to the user so its window is hidden and it will often be killed by
+the system when memory is needed elsewhere.
+• If an activity is stopped, the system can drop the activity from memory
+by either asking it to finish, or simply killing its process. When it is
+displayed again to the user, it must be completely restarted and restored
+to its previous state.
+An Activity has lifecycle methods onCreate which is called when the Act-
+ivity is first created and which creates and sets the content View for the user
+interface window, onStart and onStop which are called whenever the window is
+about to be made visible or completely obscured, onResume and onPause which
+are called whenever the window has gained or lost focus (such as if it is partially
+obscured by another window in front, so might choose to persist data changes),
+and onDestroy when the Activity is about to be destroyed. These methods
+are already implemented in Activity, it is up to the class which extends it to
+override these methods to perform custom UI setup or other Android operations.
+You must always make a call to the parent Activity method for each method
+you override by calling super.
+The activity life-cycle diagram shows the important state paths of an Act-
+ivity. The square rectangles represent callback methods that can be overridden
+to perform operations when the Activity moves between states. The ovals are
+major states the Activity can be in.
+An Activity can start another Activity (and have it placed on the top of
+the activity stack) by calling the startActivity method, passing an Intent
+parameter that describes the action the called Activity should perform (such
+as ACTION_EDIT or ACTION_MAIN) and data for it to operate on. If the called
+Activity should return a result when it finishes the startActivityForResult
+method is instead used (passing an int identifier for the request), which results
+in an asynchronous call to the calling Activity method onActivityResult
+when the called Activity finishes. An Activity can call the setResult method
+if it should return an Intent result to a calling Activity before it calls finish
+to have itself destroyed and popped off the activity stack.
+Every Activity should be declared in the AndroidManifest.xml mani-
+fest with the <activity> tag. Including the <intent-filter> tag within the
+<activity> tag:
+<intent-filter>
+<action android:name="android.intent.action.MAIN" />
+<category android:name=
+"android.intent.category.LAUNCHER" />
+</intent-filter>
+results in that Activity being started when the application launches.
+Within the Activity method onCreate the View for the user interface could
+be specified programmatically. A View represents the basic building block for
+user interface components. A View occupies a rectangular area on the screen and
+is responsible for drawing and event handling. View is the base class for widgets,
+which are used to create interactive UI components (such as buttons, text fields,
+progress bars). The ViewGroup subclass is the base class for layouts, which are
+invisible containers that hold other View’s (or other ViewGroup) and define their
+layout properties. The class HelloWorldActivity which extends Activity is
+a simple Android program that simply overrides the onCreate method to do
+its own user interface layout. It creates a TextView which is a subclass of View
+and passes it to the HelloWordActivity parent method setContentView.
+However, for greater flexibility Android user interface and other resources
+such as localised strings and images are usually instead specified using XML
+resource files. Whenever an XML resource is saved to the res folder of the
+project the Android Development Tools automatically generate a Java class
+called R from all the XML resources (which should not be manually altered),
+with constants to identify the drawable resources, layout resources and View
+identifiers defined via @+id/name within them, and values resources. The R
+class provides some convenience int constants for Android applications to access
+the contents of the XML resources, such as obtaining the View for an activity:
+setContentView(R.layout.xml_resource);
+or to obtain a reference to an individual View component of the UI:
+Button okayButton = (Button)findViewById(R.id.name);
