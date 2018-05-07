@@ -1,0 +1,141 @@
+This avoids the need to hard code the user interface and strings within the
+application code itself.
+For example, the project AndroidUIDemo has the activity AndroidUIDemoActivity
+launched on startup, which is a ListActivity that presents menu options to the
+user and whose layout is specified by main.xml. The activity LayoutActivity
+shows a more elaborate layout of user interface View using layout_activity.xml,
+InputActivity and input_activity.xml show a basic EditText user input
+that returns an Intent result back to the calling AndroidUIDemoActivity ac-
+tivity, whereas GraphicsActivity and graphics_activity.xml show an ani-
+mated bouncing ball using BallView.
+A View represents the basic building block for user interface components. A
+View occupies a rectangular area on the screen and is responsible for drawing
+and event handling. View is the base class for widgets, which are used to create
+interactive UI components (such as buttons, text fields, progress bars). The
+ViewGroup subclass is the base class for layouts, which are invisible containers
+that hold other View’s (or other ViewGroup) and define their layout properties.
+Android can display any View or ViewGroup which can be added to an
+Activity. Simply, a View or any of its subclasses can be added to an Activity
+as a single entity to the user, whereas a ViewGroup can be added to an Activity
+which itself can hold multiple views. In the Android class hierarchy ViewGroup
+is actually a subclass of View.
+There are many components that are subclasses of View that can be added
+either singly to an Activity or collectively to a ViewGroup. Some common
+component examples are as follows:
+• TextView displays a String as text to the user. A TextView is a complete
+text editor, however it is not configured to allow editing. To allow user
+editing the subclass EditText can instead be used.
+• Button represents a push-button widget. Push-buttons can be pressed,
+or clicked by the user to perform an action. There are also subclasses of
+Button which include CheckBox, RadioButton, Switch, ToggleButton.
+• ImageView displays an arbitrary image, such as an icon. The ImageView
+class can load images from various sources, takes care of computing its
+measurement from the image so that it can be used in any layout manager,
+and provides various display options such as scaling and tinting.
+• KeyboardView is a view that renders a virtual keyboard. It handles ren-
+dering of keys and detecting key presses and touch movements.
+• ProgressBar which gives a visual indicator of progress in some operation.
+It displays a bar to the user representing how far the operation has pro-
+gressed. The application can change the amount of progress (modifying
+the length of the bar) as it moves forward. There is also a secondary
+progress displayable on a progress bar which is useful for displaying in-
+termediate progress, such as the buffer level during a streaming playback
+progress bar.
+• WebView displays web pages. This class can be used to create a web
+browser or simply display some online content within an Activity.
+• AnalogClock which is a widget to display an analog clock with two hands
+for hours and minutes. One can also use TextClock which displays the
+current date and/or time as a formatted string.
+• Custom views can also be created by creating a class which extends View.
+Similar to Java swing, view components such as buttons can be assigned
+a listener which invokes an event when the button is touched on the mobile
+device. There are many different listeners that listen for specific events on a
+range of components. For example, an Android application can listen for but-
+ton presses by adding an object which implements the View.OnClickListener
+as a parameter to the buttons setOnClickListener method. Because the lis-
+tening object implements the View.OnClickListener interface it must have
+the method onClick(View v) which gets passed the object which invoked the
+event. Below is an example of a listener being added to a button. Note that
+the listener used is handled with an anonymous inner class.
+public void onCreate(Bundle savedInstanceState)
+{ ....
+button = new Button(this);
+button.setText("CLICK ME!");
+button.setOnClickListener(new View.OnClickListener() {
+public void onClick(View v) {
+// Perform action on click
+}
+})
+...
+}
+There are also various ways in which the components or views can be laid
+out using one of the subclasses of ViewGroup. Similar to layout managers in
+Java swing, ViewGroup subclasses can be used to arrange components program-
+matically and take care of how they should appear to the user. Android UI uses
+a tree like structure for arranging components. View or ViewGroup objects are
+added as children to a parent or enclosing ViewGroup. Some common ViewGroup
+subclasses are as follows:
+• LinearLayout is a layout that arranges its children in a single column
+or a single row. The direction of the row can be set by calling set-
+Orientation(). You can also specify gravity, which specifies the align-
+ment of all the child elements by calling setGravity().
+• RelativeLayout is a layout where the positions of the children can be
+described in relation to each other or to the parent.
+• GridLayout is similar to the Java swing version as it places its children
+in a rectangular grid. The grid is composed of a set of infinitely thin lines
+that separate the viewing area into cells.
+• FrameLayout is designed to block out an area on the screen to display
+a single item. Generally, FrameLayout should be used to hold a single
+child view, because it can be difficult to organize child views in a way
+that is scalable to different screen sizes without the children overlapping
+each other. You can, however, add multiple children to a FrameLayout
+and control their position within the FrameLayout by assigning gravity to
+each child.
+• AbsoluteLayout allows one to specify exact locations (x,y coordinates)
+of its children. Absolute layouts are less flexible and harder to maintain
+than other types of layouts without absolute positioning.
+ TabHost is a container for a tabbed window view. This object holds two
+children: a set of tab labels that the user clicks to select a specific tab,
+and a FrameLayout object that displays the contents of that tab. The
+individual elements are typically controlled using this container object
+rather than setting values on the child elements themselves.
+Android allows simple rendering much like Java SE swing libraries, which
+allows the Graphics object to draw images and simple shapes overlayed onto
+a JPanel. To render simple graphics, it is good practice to create a custom
+class that extends Android View. Drawing to a View, is the best way to render
+simple graphics that do not need to change dynamically and are not part of a
+performance-intensive game. Custom graphics can be done inside the overrid-
+den method onDraw(Canvas c) of the View class (a call to super.onDraw()
+should be made here to allow the View to update its own state first). The
+onDraw(Canvas c) method gets passed in a Canvas parameter. A Canvas works
+as an interface to the actual surface upon which the graphics will be drawn ? it
+holds all “draw” calls. Via the Canvas, your drawing is actually performed upon
+an underlying BitMap, which is placed into the window. When drawing within
+the onDraw callback method, the Canvas object can be used to call methods
+which draws simple graphics. Using Canvas to draw basic shapes and pictures
+is similar to using the Graphics object in swing. Another alternative is to
+use a subclass of the Android abstract Drawable class and pass the instance of
+Canvas to its method draw(Canvas c) when it should be drawn. A Drawable
+is a general abstraction for “something that can be drawn”. Most often you will
+deal with Drawable as the type of resource retrieved for drawing to the screen.
+The Drawable class provides a generic API for dealing with an underlying vi-
+sual resource that may take a variety of forms. There are many subclasses of
+Drawable which can be used to create a variety of graphics. Some of these
+classes are:
+• ColorDrawable is a specialized Drawable that fills the Canvas with a
+specified color.
+• PictureDrawable is a subclass of Drawable that wraps a Picture, allow-
+ing it to be used wherever a Drawable is supported.
+• BitmapDrawable is a Drawable that wraps a bitmap and can be tiled,
+stretched or aligned. A BitmapDrawable can be created from a file path,
+an input stream, through XML inflation, or from a Bitmap object. It can
+also be defined in an XML file with the <bitmap> element tag.
+• ShapeDrawable is a Drawable object that draws primitive shapes. A
+ShapeDrawable takes a Shape object and manages its presence on the
+screen. A subclass of the Shape object can be passed which includes:
+OvalShape, RectShape, RoundRectShape, ArcShape and PathShape. If
+no Shape is given, then the ShapeDrawable will default to a RectShape.
+This object can be defined in an XML file with the <shape> element.
+The code below shows a simple class called MyView which can be used for
+low-level drawing. It extends View and overrides the onDraw method. It shows
+how to draw a rectangle using both drawing approaches.
