@@ -1,0 +1,122 @@
+If drawing is done on the entire display, then it may be convenient to add
+buttons to the phone menu, instead of using “soft buttons” in the user interface,
+to control or dynamically change the graphics scene. This is typically done in
+the Android Activity class by specifying several MenuItem objects as fields for
+each button or selectable item to appear in the phone menu. Instantiating each
+MenuItem object is done in the Activity method onCreateOptionsMenu(Menu
+menu) using the Menu parameter method add(String title). The String that
+is passed into the add method is the text that will appear on the selectable menu
+for that button. Creating a MenuItem can also can be done in the XML resource
+files by creating an .xml file in the res/menu folder and using the <item> element
+tag. The menu items automatically listen for events when they are selected from
+the phone application menu. Once pressed they invoke the callback method
+of Activity called onOptionsItemSelected(MenuItem item). The parameter
+that is passed is the MenuItem that invoked the event.
+Another useful feature, especially for debugging or notifying the user of an
+event, is the use of Toast objects. A Toast provides simple feedback about
+an operation in a small popup. It only fills the amount of space required for
+the message and the current activity remains visible and interactive. It can be
+assigned a gravity or position on the screen, a String text to display and a
+duration to display on the screen.
+The following code shows two MenuItem objects added to the phone appli-
+cation menu, and the events that happen when they are pressed. It also shows
+a Toast that is displayed once the MenuItem has been selected.
+public class MyActivity extends Activity
+{
+private MenuItem upItem;
+private MenuItem downItem;
+private Toast toast;
+...
+public void onCreate(Bundle savedInstanceState)
+{ ...
+//toast of short duration in top left of screen
+toast = Toast.makeText(this, "HELLO",
+Toast.LENGTH_SHORT);
+toast.setGravity(Gravity.TOP|Gravity.RIGHT,0,0);
+}
+@Override
+public boolean onCreateOptionsMenu(Menu menu)
+{ upItem = menu.add("Up");
+downItem = menu.add("Down");
+// method that programmatically opens options menu
+openOptionsMenu();
+return true;
+}
+@Override
+public boolean onOptionsItemSelected(MenuItem item)
+{ if(item == upItem)
+{ toast.setText("Up Pressed");
+}
+else if(item == downItem)
+{ toast.setText("Down Pressed");
+}
+toast.show();
+return true;
+}
+...
+}
+Since smart phones are touch sensitive, an Android program can capture
+when and where a user touches the display. Single or multi-touch gestures are
+relatively simple and are achieved by registering a listener on the View that
+might receive touch events. View class contains several nested interfaces called
+View.OnXxxxxListener, that can be implemented in order to receive touch
+events as well as methods setXxxxxListener to register the callback listeners
+with the View. For example most of the touch events can be handled by creating
+a class which implements the View.OnTouchListener interface and passing that
+class instance to the View objects setOnTouchListener. As well as screen
+gestures, if the mobile device has hardware keys then a View.OnKeyListener
+can also be registered to the View. An example for listening for a finger being
+dragged around the screen is shown below. A View.OnTouchListener is used
+and the onTouch method contains the associated action of that touch.
+...
+//Assuming Activity has a instance of a View
+view.setOnTouchListener(new TouchListener());
+...
+public class TouchListener implements View.OnDragListener
+{
+/*
+Method that must be overridden in order to implement
+interface. It is passed 2 parameters, the View which
+received the motion event and the MotionEvent object,
+which is a wrapper class for the event. It holds the
+x,y screen location for the event and the action that
+caused the event.
+*/
+public boolean onTouch(View v, MotionEvent event)
+{ //if the view variable declared earlier received the
+//event and the event is a dragging movement
+if(v == view &&
+event.getAction() == MotionEvent.ACTION_MOVE)
+{ float x = event.getX();
+float y = event.getY();
+//DO SOMETHING!
+}
+return true;
+}
+}
+An Intent provides a facility for performing late runtime binding between
+the launching of activities where it can be thought of as the glue between activi-
+ties. It is a passive data structure holding an abstract description of an action to
+be performed. An Intent can be used to pass simple information such as primi-
+tives and strings between Activity classes. An Intent uses a map that assigns
+key-value pairs, where a value is accessed and mutated using a unique string
+identifier. Analogous to how variables work, the key is used to obtain a value.
+Each key-value pair can be added to the Intent using the putExtra() method
+and passing in a String key with any String or primitive value. An Activity
+that is invoked can get all the information passed to it from the Intent which
+comes wrapped in a Bundle object. The Bundle object has several getXxxxx()
+methods (e.g. getDouble() to get double values) to obtain the passed values.
+The same key identifier used to store the value in the calling Activity must
+also be passed into the getXxxxx() method.
+If the calling Activity expects a result from the Activity it called on
+completion, the startActivityForResult method is used instead of start-
+Activity. An int identifier for the request (request code) should be passed
+into the method with the Intent. This registers an asynchronous call to the
+calling Activity method onActivityResult when the called Activity finishes.
+The same request code that was passed to the called Activity is given as a
+parameter to the onActivityResult. This allows an application to start many
+different activities with different request codes and allows the calling Activity
+to perform a specific operation once a certain called Activity has finished.
+Once the called Activity has finished it can pass information back to the
+calling Activity by using the map held in Intent using the method putExtra().
+It can call the setResult method and return the Intent with the key-value
